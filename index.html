@@ -7,80 +7,128 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<title>Mis Finanzas</title>
+<title>Mi $$</title>
 <style>
-:root{--orange:#f97316;--bg:#f6f7f9;--card:#fff;--text:#17202a;--muted:#68727d;--line:#e5e7eb;--green:#16834b;--red:#c0392b}
+:root{--orange:#f97316;--bg:#f6f7f9;--card:#fff;--text:#17202a;--muted:#68727d;--line:#e5e7eb;--green:#16834b;--red:#c0392b;--blue:#2563eb;--yellow:#b7791f}
 *{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-main{max-width:760px;margin:auto;padding:18px 14px 92px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.top h1{margin:0;font-size:26px}.pill{background:#fff1e8;color:#b94e08;padding:8px 11px;border-radius:999px;font-size:13px;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px}.label{color:var(--muted);font-size:12px}.num{font-size:21px;font-weight:800;margin-top:5px;overflow-wrap:anywhere}.section{margin-top:13px}.section h2{font-size:17px;margin:0 0 9px}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:16px}button{border:0;border-radius:12px;padding:12px 15px;background:var(--orange);color:white;font-weight:750;min-height:44px}.secondary{background:#fff3eb;color:#b94e08}.actions{display:flex;gap:8px;flex-wrap:wrap}.budgetbar{height:10px;background:#eceff1;border-radius:20px;overflow:hidden}.budgetfill{height:100%;background:var(--orange);width:0}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.table{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px}.table table{width:100%;border-collapse:collapse;font-size:14px}.table th,.table td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{font-size:11px;color:var(--muted)}.income{color:var(--green);font-weight:750}.expense{color:var(--red);font-weight:750}.empty{text-align:center;color:var(--muted);padding:22px}.catrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}.small{font-size:12px;color:var(--muted)}@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}.form{grid-template-columns:repeat(4,1fr)}.full{grid-column:auto}.form button{grid-column:4}}
+main{max-width:820px;margin:auto;padding:18px 14px 92px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}.top h1{margin:0;font-size:26px}.pill{background:#fff1e8;color:#b94e08;padding:8px 11px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:15px}.label{color:var(--muted);font-size:12px}.num{font-size:21px;font-weight:800;margin-top:5px;overflow-wrap:anywhere}.section{margin-top:13px}.section h2{font-size:17px;margin:0 0 9px}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.full{grid-column:1/-1}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input,select,button{font:inherit}input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:16px}button{border:0;border-radius:12px;padding:12px 15px;background:var(--orange);color:white;font-weight:750;min-height:44px;cursor:pointer}.secondary{background:#fff3eb;color:#b94e08}.danger{background:#fff0ef;color:var(--red)}.actions{display:flex;gap:8px;flex-wrap:wrap}.budgetbar{height:10px;background:#eceff1;border-radius:20px;overflow:hidden}.budgetfill{height:100%;background:var(--orange);width:0}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.table{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px}.table table{width:100%;border-collapse:collapse;font-size:14px}.table th,.table td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{font-size:11px;color:var(--muted)}.income{color:var(--green);font-weight:750}.expense{color:var(--red);font-weight:750}.empty{text-align:center;color:var(--muted);padding:22px}.catrow{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}.small{font-size:12px;color:var(--muted)}.status{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}.dot{width:9px;height:9px;border-radius:50%;background:#9ca3af}.dot.ok{background:var(--green)}.dot.warn{background:var(--orange)}.dot.err{background:var(--red)}.modal{position:fixed;inset:0;background:rgba(15,23,42,.48);display:flex;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.hidden{display:none}.modalbox{width:min(460px,100%);background:#fff;border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.modalbox h2{margin:0 0 6px}.modalbox p{margin:0 0 15px;color:var(--muted);font-size:13px}.modalbox .field{margin:10px 0}.modalbox .actions{margin-top:14px}.useremail{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.notice{padding:11px 12px;border-radius:12px;background:#f8fafc;border:1px solid var(--line);font-size:12px;color:var(--muted);margin-top:10px}.sync-actions{display:flex;gap:8px;flex-wrap:wrap}.sync-actions button{min-height:40px;padding:9px 12px;font-size:13px}.tag{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:750;background:#f3f4f6;color:#4b5563}.tag.in{background:#ecfdf3;color:var(--green)}.tag.out{background:#fff1f0;color:var(--red)}.tag.rec{background:#eff6ff;color:var(--blue)}.projection-card{border-left:5px solid var(--green)}.projection-card.warn{border-left-color:var(--orange)}.projection-card.err{border-left-color:var(--red)}.projection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.metric{background:#f8fafc;border-radius:13px;padding:10px}.metric strong{display:block;font-size:15px;margin-top:3px}.month-block{border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:9px;background:#fff}.month-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.month-head strong{font-size:15px}.bar{height:8px;background:#eceff1;border-radius:20px;overflow:hidden;margin-top:8px}.barfill{height:100%;background:var(--blue)}.planned-list{display:flex;flex-direction:column;gap:8px}.planned-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.planned-item:last-child{border-bottom:0}.planned-main{min-width:0}.planned-main strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.delete-small{min-height:34px;padding:7px 10px;font-size:12px;background:#fff0ef;color:var(--red)}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}.form{grid-template-columns:repeat(4,1fr)}.full{grid-column:auto}.form button{grid-column:4}}
 </style>
 </head>
 <body>
 <main>
-<div class="top"><h1>💰 Mis Finanzas</h1><span class="pill">COP</span></div>
+<div class="top"><div><h1>💰 Mi $$</h1><div id="userLine" class="small">Solo en este dispositivo</div></div><span class="pill">COP</span></div>
+
+<section class="section card" id="cloudCard">
+<div class="row"><div><h2>☁️ Sincronización</h2><div id="syncStatus" class="status"><span class="dot"></span><span>Sin iniciar sesión</span></div></div><div class="sync-actions"><button id="loginBtn" class="secondary">Iniciar sesión</button><button id="syncBtn" class="secondary" style="display:none">Sincronizar</button><button id="logoutBtn" class="danger" style="display:none">Salir</button></div></div>
+<div id="syncNotice" class="notice">Tus datos actuales siguen guardados localmente. Al iniciar sesión podremos sincronizarlos entre tu iPhone y computador.</div>
+</section>
 
 <div class="grid">
-<div class="card"><div class="label">Saldo</div><div id="saldo" class="num">$0</div></div>
-<div class="card"><div class="label">Ingresos</div><div id="ingresos" class="num">$0</div></div>
-<div class="card"><div class="label">Gastos</div><div id="gastos" class="num">$0</div></div>
-<div class="card"><div class="label">Ahorro</div><div id="ahorro" class="num">$0</div></div>
+<div class="card"><div class="label">Saldo actual</div><div id="saldo" class="num">$0</div></div>
+<div class="card"><div class="label">Ingresos reales</div><div id="ingresos" class="num">$0</div></div>
+<div class="card"><div class="label">Gastos reales</div><div id="gastos" class="num">$0</div></div>
+<div class="card"><div class="label">Ahorro actual</div><div id="ahorro" class="num">$0</div></div>
 </div>
 
-<section class="section card">
-<h2>➕ Registrar movimiento</h2>
-<div class="form">
+<section class="section card"><h2>🔮 Próximos 30 días</h2><div class="projection-grid">
+<div class="metric"><div class="label">Ingresos previstos</div><strong id="nextIncome">$0</strong></div>
+<div class="metric"><div class="label">Gastos previstos</div><strong id="nextExpense">$0</strong></div>
+<div class="metric"><div class="label">Disponible proyectado</div><strong id="nextAvailable">$0</strong></div>
+</div><div id="nextStatus" class="notice">Registra tus próximos ingresos y gastos para calcular la proyección.</div></section>
+
+<section class="section card"><h2>➕ Registrar movimiento real</h2><div class="form">
 <div><label>Tipo</label><select id="tipo"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div>
 <div><label>Categoría</label><select id="categoria"><option>Alimentación</option><option>Vivienda</option><option>Transporte</option><option>Servicios</option><option>Salud</option><option>Educación</option><option>Deudas</option><option>Ocio</option><option>Compras</option><option>Ahorro</option><option>Otros</option></select></div>
-<div><label>Fecha</label><input id="fecha" type="date"></div>
-<div><label>Valor (COP)</label><input id="valor" type="number" min="1" step="1000" placeholder="0"></div>
-<div class="full"><label>Concepto</label><input id="concepto" maxlength="80" placeholder="Ej. Mercado, arriendo, nómina..."></div>
-<button id="add" class="full">Agregar movimiento</button>
-</div>
-</section>
+<div><label>Fecha</label><input id="fecha" type="date"></div><div><label>Valor (COP)</label><input id="valor" type="number" min="1" step="1000" placeholder="0"></div>
+<div class="full"><label>Concepto</label><input id="concepto" maxlength="80" placeholder="Ej. Mercado, arriendo, nómina..."></div><button id="add" class="full">Agregar movimiento</button>
+</div></section>
 
-<section class="section card">
-<div class="row"><div><h2>🎯 Presupuesto mensual</h2><div id="budgetText" class="small">No definido</div></div><button id="budget" class="secondary">Definir</button></div>
-<div style="margin-top:12px" class="budgetbar"><div id="budgetFill" class="budgetfill"></div></div>
-</section>
+<section class="section card"><h2>🔮 Registrar ingreso o gasto próximo</h2><div class="small" style="margin-bottom:10px">Esto no cambia tu saldo actual. Solo se usa para proyectar los próximos meses.</div><div class="form">
+<div><label>Tipo</label><select id="pTipo"><option value="gasto">Próximo gasto</option><option value="ingreso">Próximo ingreso</option></select></div>
+<div><label>Categoría</label><select id="pCategoria"><option>Vivienda</option><option>Servicios</option><option>Alimentación</option><option>Transporte</option><option>Deudas</option><option>Salud</option><option>Educación</option><option>Ocio</option><option>Compras</option><option>Trabajo</option><option>Otros</option></select></div>
+<div><label>Fecha inicial</label><input id="pFecha" type="date"></div><div><label>Valor (COP)</label><input id="pValor" type="number" min="1" step="1000" placeholder="0"></div>
+<div><label>Repetición</label><select id="pRec"><option value="none">Una sola vez</option><option value="monthly">Cada mes</option></select></div>
+<div><label>Hasta (mes)</label><input id="pHasta" type="month"></div>
+<div class="full"><label>Concepto</label><input id="pConcepto" maxlength="80" placeholder="Ej. Nómina, arriendo, seguro..."></div>
+<button id="addPlanned" class="full">Guardar proyección</button>
+</div></section>
 
-<section class="section card">
-<div class="row"><h2>📊 Gastos por categoría</h2><span id="monthLabel" class="small"></span></div>
-<div id="cats"></div>
-</section>
+<section class="section card"><div class="row"><h2>📌 Próximos compromisos</h2><span class="small">Ingresos y gastos previstos</span></div><div id="plannedList" class="planned-list"></div></section>
 
-<section class="section">
-<div class="row"><h2>🧾 Movimientos</h2><button id="clear" class="secondary">Borrar</button></div>
-<div class="table"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Concepto</th><th>Valor</th></tr></thead><tbody id="rows"></tbody></table></div>
-</section>
+<section class="section card"><div class="row"><div><h2>📊 Proyección de los próximos meses</h2><div class="small">Saldo actual + ingresos previstos − gastos previstos</div></div><select id="projectionMonths" style="width:auto;min-width:125px"><option value="3">3 meses</option><option value="6" selected>6 meses</option><option value="12">12 meses</option></select></div><div id="projection"></div></section>
 
-<section class="section card">
-<h2>📱 Instalar en iPhone</h2>
-<div class="small">Abre esta app desde Safari, toca Compartir y selecciona “Añadir a pantalla de inicio”.</div>
-</section>
+<section class="section card"><div class="row"><div><h2>🎯 Presupuesto mensual</h2><div id="budgetText" class="small">No definido</div></div><button id="budget" class="secondary">Definir</button></div><div style="margin-top:12px" class="budgetbar"><div id="budgetFill" class="budgetfill"></div></div></section>
+<section class="section card"><div class="row"><h2>📊 Gastos por categoría</h2><span id="monthLabel" class="small"></span></div><div id="cats"></div></section>
+<section class="section"><div class="row"><h2>🧾 Movimientos reales</h2><button id="clear" class="secondary">Borrar</button></div><div class="table"><table><thead><tr><th>Fecha</th><th>Categoría</th><th>Concepto</th><th>Valor</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<section class="section card"><h2>📱 Instalar en iPhone</h2><div class="small">Abre esta app desde Safari, toca Compartir y selecciona “Añadir a pantalla de inicio”.</div></section>
 </main>
 
+<div id="loginModal" class="modal hidden"><div class="modalbox"><h2>🔐 Entrar a Mi $$</h2><p>Usa el correo y la contraseña que creaste en Supabase.</p><div class="field"><label>Correo electrónico</label><input id="email" type="email" autocomplete="email" placeholder="tu correo"></div><div class="field"><label>Contraseña</label><input id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña"></div><div id="loginError" class="notice" style="display:none"></div><div class="actions"><button id="doLogin">Entrar</button><button id="closeLogin" class="secondary">Cancelar</button></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const KEY="mis-finanzas-v1";let state=JSON.parse(localStorage.getItem(KEY)||'{"moves":[],"budget":0}');
+const SUPABASE_URL="https://jfieskoytxouxrsmdowb.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_w4MgOhH27uZTgZtNOSxpUQ_NtMOqplx";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const KEY="mis-finanzas-v1", PLAN_KEY="mis-finanzas-plan-v1";
+let state=JSON.parse(localStorage.getItem(KEY)||'{"moves":[],"budget":0}');
+let planned=JSON.parse(localStorage.getItem(PLAN_KEY)||'[]');
 const $=id=>document.getElementById(id);
 const money=n=>new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(n||0);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const d=new Date(), today=new Date(d-d.getTimezoneOffset()*60000).toISOString().slice(0,10);$("fecha").value=today;
+const esc=s=>String(s??"").replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const localDate=d=>{const x=new Date(d);return new Date(x.getTime()-x.getTimezoneOffset()*60000).toISOString().slice(0,10)};
+const today=localDate(new Date());$("fecha").value=today;$("pFecha").value=today;
+const currentMonth=today.slice(0,7);$("pHasta").value=(()=>{const d=new Date();d.setMonth(d.getMonth()+5);return localDate(d).slice(0,7)})();
+let currentUser=null;
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
+function savePlanned(){localStorage.setItem(PLAN_KEY,JSON.stringify(planned));render()}
+function normalizeLocal(){let changed=false;state.moves=state.moves.map(x=>{if(!x.id){changed=true;return {...x,id:crypto.randomUUID()};}return x});if(changed)localStorage.setItem(KEY,JSON.stringify(state))}
+function addMonths(dateStr,n){const d=new Date(dateStr+"T12:00:00");d.setMonth(d.getMonth()+n);return localDate(d)}
+function monthName(ym){return new Date(ym+"-01T12:00:00").toLocaleDateString("es-CO",{month:"long",year:"numeric"})}
+function occurrences(item,from,to){const out=[];let cur=item.date;let i=0;const until=item.until||"9999-12-31";while(cur<=to&&i<120){if(cur>=from)out.push({...item,date:cur});if(item.rec!="monthly")break;cur=addMonths(cur,1);i++;if(cur>until)break}return out}
+function projectedItems(from,to){return planned.flatMap(p=>occurrences(p,from,to)).sort((a,b)=>String(a.date).localeCompare(String(b.date)))}
 function render(){
- const inc=state.moves.filter(x=>x.type==="ingreso").reduce((a,x)=>a+x.value,0);
- const exp=state.moves.filter(x=>x.type==="gasto").reduce((a,x)=>a+x.value,0);
- $("saldo").textContent=money(inc-exp);$("ingresos").textContent=money(inc);$("gastos").textContent=money(exp);$("ahorro").textContent=money(Math.max(0,inc-exp));
- $("budgetText").textContent=state.budget?`Gastado ${money(exp)} de ${money(state.budget)}`:"No definido";
- $("budgetFill").style.width=(state.budget?Math.min(100,exp/state.budget*100):0)+"%";
- $("monthLabel").textContent=d.toLocaleDateString("es-CO",{month:"long",year:"numeric"});
- let cats={};state.moves.filter(x=>x.type==="gasto").forEach(x=>cats[x.cat]=(cats[x.cat]||0)+x.value);
+ const inc=state.moves.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0),exp=state.moves.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0),balance=inc-exp;
+ $("saldo").textContent=money(balance);$("ingresos").textContent=money(inc);$("gastos").textContent=money(exp);$("ahorro").textContent=money(Math.max(0,balance));
+ $("budgetText").textContent=state.budget?`Gastado ${money(exp)} de ${money(state.budget)}`:"No definido";$("budgetFill").style.width=(state.budget?Math.min(100,exp/state.budget*100):0)+"%";
+ $("monthLabel").textContent=new Date().toLocaleDateString("es-CO",{month:"long",year:"numeric"});let cats={};state.moves.filter(x=>x.type==="gasto").forEach(x=>cats[x.cat]=(cats[x.cat]||0)+Number(x.value));
  $("cats").innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="catrow"><span>${esc(k)}</span><strong>${money(v)}</strong></div>`).join("")||'<div class="empty">Aún no hay gastos.</div>';
- $("rows").innerHTML=state.moves.slice().reverse().map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.cat)}</td><td>${esc(x.concept)}</td><td class="${x.type==="ingreso"?"income":"expense"}">${x.type==="ingreso"?"+":"−"}${money(x.value)}</td></tr>`).join("")||'<tr><td colspan="4" class="empty">No hay movimientos registrados.</td></tr>';
+ $("rows").innerHTML=state.moves.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))).map(x=>`<tr><td>${esc(x.date)}</td><td>${esc(x.cat)}</td><td>${esc(x.concept)}</td><td class="${x.type==="ingreso"?"income":"expense"}">${x.type==="ingreso"?"+":"−"}${money(x.value)}</td></tr>`).join("")||'<tr><td colspan="4" class="empty">No hay movimientos registrados.</td></tr>';
+ renderPlanned();renderProjection();
 }
-$("add").onclick=()=>{let v=Number($("valor").value),c=$("concepto").value.trim();if(!v||v<1||!c){alert("Completa concepto y valor.");return}state.moves.push({type:$("tipo").value,cat:$("categoria").value,date:$("fecha").value,concept:c,value:v});$("valor").value="";$("concepto").value="";save()};
+function renderPlanned(){
+ const to=addMonths(today,11),items=projectedItems(today,to).slice(0,20);
+ $("plannedList").innerHTML=items.length?items.map(x=>`<div class="planned-item"><div class="planned-main"><strong>${esc(x.concept)}</strong><div class="small">${esc(x.date)} · ${esc(x.cat)} ${x.rec==="monthly"?'<span class="tag rec">mensual</span>':''}</div></div><div style="text-align:right"><div class="${x.type==="ingreso"?"income":"expense"}">${x.type==="ingreso"?"+":"−"}${money(x.value)}</div><button class="delete-small" onclick="deletePlanned('${x.sourceId||x.id}')">Eliminar</button></div></div>`).join(""):'<div class="empty">Aún no tienes ingresos o gastos previstos.</div>';
+ const ni=items.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0),ne=items.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0);
+ const until=addMonths(today,0);const next30=addDays(today,30);const n30=projectedItems(today,next30);const i30=n30.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0),e30=n30.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0),bal=state.moves.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0)-state.moves.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0),available=bal+i30-e30;
+ $("nextIncome").textContent=money(i30);$("nextExpense").textContent=money(e30);$("nextAvailable").textContent=money(available);const cls=available<0?"err":available<Math.max(0,e30*0.5)?"warn":"ok";$("nextStatus").className="notice "+(cls==="err"?"projection-card err":cls==="warn"?"projection-card warn":"projection-card");$("nextStatus").textContent=available<0?"🔴 La proyección de 30 días queda negativa. Revisa tus próximos gastos.":available<Math.max(0,e30*0.5)?"🟡 El margen proyectado de 30 días es reducido.":"🟢 La proyección de 30 días mantiene saldo positivo.";
+}
+function addDays(dateStr,n){const d=new Date(dateStr+"T12:00:00");d.setDate(d.getDate()+n);return localDate(d)}
+function deletePlanned(id){if(!confirm("¿Eliminar esta proyección?"))return;planned=planned.filter(x=>x.id!==id);savePlanned()}
+window.deletePlanned=deletePlanned;
+function renderProjection(){
+ const months=Number($("projectionMonths").value||6),base=state.moves.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0)-state.moves.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0);let html="",running=base;
+ for(let i=0;i<months;i++){const ym=addMonths(today,i).slice(0,7),from=ym+"-01",to=addMonths(from,1).slice(0,10),items=projectedItems(from,to),inc=items.filter(x=>x.type==="ingreso").reduce((a,x)=>a+Number(x.value),0),exp=items.filter(x=>x.type==="gasto").reduce((a,x)=>a+Number(x.value),0);running+=inc-exp;const cls=running<0?"err":running<Math.max(0,exp*.5)?"warn":"";html+=`<div class="month-block ${cls}"><div class="month-head"><strong>${esc(monthName(ym))}</strong><span class="${running<0?"expense":running<exp*.5?"" :"income"}">${money(running)}</span></div><div class="projection-grid"><div class="metric"><div class="label">Ingresos</div><strong class="income">+${money(inc)}</strong></div><div class="metric"><div class="label">Gastos</div><strong class="expense">−${money(exp)}</strong></div><div class="metric"><div class="label">Saldo proyectado</div><strong>${money(running)}</strong></div></div><div class="bar"><div class="barfill" style="width:${inc+exp?Math.min(100,Math.max(0,running)/(inc+exp)*100):0}%"></div></div></div>`}
+ $("projection").innerHTML=html;
+}
+function setSyncStatus(kind,text){$("syncStatus").innerHTML=`<span class="dot ${kind}"></span><span>${esc(text)}</span>`}
+function cloudRow(x){return {id:x.id,user_id:currentUser.id,tipo:x.type,categoria:x.cat,fecha:x.date,valor:Number(x.value),concepto:x.concept||null,created_at:x.created_at,updated_at:new Date().toISOString()}}
+function localFromCloud(r){return {id:r.id,type:r.tipo,cat:r.categoria||"Otros",date:r.fecha,value:Number(r.valor),concept:r.concepto||""}}
+async function pushLocalMoves(){if(!currentUser)return;normalizeLocal();if(!state.moves.length){setSyncStatus("ok","Nube conectada · sin movimientos locales");return 0}const rows=state.moves.map(cloudRow);const {error}=await supabaseClient.from("movimientos").upsert(rows,{onConflict:"id"});if(error)throw error;return rows.length}
+async function pullCloudMoves(){const {data,error}=await supabaseClient.from("movimientos").select("id,user_id,tipo,categoria,fecha,valor,concepto").order("fecha",{ascending:false});if(error)throw error;const map=new Map(state.moves.map(x=>[x.id,x]));for(const r of data||[])map.set(r.id,localFromCloud(r));state.moves=Array.from(map.values());localStorage.setItem(KEY,JSON.stringify(state));render();return (data||[]).length}
+async function syncNow(){if(!currentUser)return;try{setSyncStatus("warn","Sincronizando…");normalizeLocal();const uploaded=await pushLocalMoves();const downloaded=await pullCloudMoves();setSyncStatus("ok",`Nube conectada · ${state.moves.length} movimientos`);$("syncNotice").textContent=`Sincronizado. ${uploaded} enviados y ${downloaded} recuperados de la nube.`}catch(e){console.error(e);setSyncStatus("err","Error de sincronización");$("syncNotice").textContent="No se pudo sincronizar. Revisa tu conexión y vuelve a intentarlo.";alert("No se pudo sincronizar con Supabase. Detalle: "+(e.message||e))}}
+async function handleSession(session){currentUser=session?.user||null;if(currentUser){$("userLine").textContent=currentUser.email||"Cuenta conectada";$("loginBtn").style.display="none";$("syncBtn").style.display="inline-block";$("logoutBtn").style.display="inline-block";setSyncStatus("warn","Conectando…");normalizeLocal();try{const {error}=await supabaseClient.from("movimientos").select("id").limit(1);if(error)throw error;const localCount=state.moves.length;const {count}=await supabaseClient.from("movimientos").select("id",{count:"exact",head:true});const cloudCount=count||0;if(localCount>0&&cloudCount===0){if(confirm(`Tienes ${localCount} movimiento(s) guardados en este dispositivo y la nube está vacía. ¿Quieres subirlos a Supabase ahora?`))await syncNow();else setSyncStatus("ok","Nube conectada · datos locales conservados")}else await syncNow()}catch(e){console.error(e);setSyncStatus("err","No se pudo conectar");$("syncNotice").textContent="La sesión está iniciada, pero no pudimos leer la tabla de movimientos."}}else{$("userLine").textContent="Solo en este dispositivo";$("loginBtn").style.display="inline-block";$("syncBtn").style.display="none";$("logoutBtn").style.display="none";setSyncStatus("","Sin iniciar sesión")}}
+$("add").onclick=async()=>{let v=Number($("valor").value),c=$("concepto").value.trim();if(!v||v<1||!c){alert("Completa concepto y valor.");return}let move={id:crypto.randomUUID(),type:$("tipo").value,cat:$("categoria").value,date:$("fecha").value,value:v,concept:c};state.moves.push(move);$("valor").value="";$("concepto").value="";save();if(currentUser){try{await pushLocalMoves();setSyncStatus("ok","Guardado y sincronizado")}catch(e){setSyncStatus("err","Guardado local · nube pendiente")}}};
+$("addPlanned").onclick=()=>{const value=Number($("pValor").value),concept=$("pConcepto").value.trim(),date=$("pFecha").value,rec=$("pRec").value,until=$("pHasta").value?$("pHasta").value+"-31":"9999-12-31";if(!value||value<1||!concept||!date){alert("Completa fecha, concepto y valor.");return}if(rec==="monthly"&&$("pHasta").value&&$("pHasta").value<date.slice(0,7)){alert("El mes final no puede ser anterior al mes inicial.");return}planned.push({id:crypto.randomUUID(),type:$("pTipo").value,cat:$("pCategoria").value,date,value,concept,rec,until});$("pValor").value="";$("pConcepto").value="";savePlanned()};
+$("projectionMonths").onchange=renderProjection;
 $("budget").onclick=()=>{let v=prompt("Presupuesto mensual en COP:",state.budget||"");if(v!==null){v=Number(v.replace(/[^0-9]/g,""));if(Number.isFinite(v)&&v>=0){state.budget=v;save()}}};
-$("clear").onclick=()=>{if(confirm("¿Borrar todos los movimientos y presupuesto?")){state={moves:[],budget:0};save()}};
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
-render();
+$("clear").onclick=()=>{if(!confirm("¿Borrar todos los movimientos y presupuesto de este dispositivo? Si ya están en la nube, permanecerán allí."))return;state={moves:[],budget:0};save()};
+$("loginBtn").onclick=()=>{$("loginError").style.display="none";$("loginModal").classList.remove("hidden");$("email").focus()};$("closeLogin").onclick=()=>$("loginModal").classList.add("hidden");
+$("doLogin").onclick=async()=>{const email=$("email").value.trim(),password=$("password").value;if(!email||!password){$("loginError").textContent="Escribe tu correo y contraseña.";$("loginError").style.display="block";return}$("doLogin").disabled=true;$("doLogin").textContent="Entrando…";try{const {error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)throw error;$("loginModal").classList.add("hidden")}catch(e){$("loginError").textContent=e.message||"No fue posible iniciar sesión.";$("loginError").style.display="block"}finally{$("doLogin").disabled=false;$("doLogin").textContent="Entrar"}};
+$("syncBtn").onclick=syncNow;$("logoutBtn").onclick=async()=>{await supabaseClient.auth.signOut();setSyncStatus("","Sesión cerrada")};
+supabaseClient.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>handleSession(session),0)});
+(async()=>{if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});render();const {data}=await supabaseClient.auth.getSession();await handleSession(data.session)})();
 </script>
 </body></html>
