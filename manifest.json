@@ -1,14 +1,20 @@
 {
-  "name": "Mi $$",
-  "short_name": "Mi $$",
-  "start_url": "./index.html",
+  "name": "SaveT",
+  "short_name": "SaveT",
+  "start_url": "./",
   "display": "standalone",
   "background_color": "#f6f7f9",
   "theme_color": "#f97316",
-  "lang": "es",
   "icons": [
-    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
-    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
-  ],
-  "description": "Control personal de ingresos, gastos, deudas, tarjetas, metas y reportes."
+    {
+      "src": "icono-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icono-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
