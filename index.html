@@ -20,7 +20,21 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
 .table{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px}.table table{width:100%;border-collapse:collapse;font-size:14px}.table th,.table td{text-align:left;padding:11px 10px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{font-size:11px;color:var(--muted)}.income{color:var(--green);font-weight:750}.expense{color:var(--red);font-weight:750}.empty{text-align:center;color:var(--muted);padding:22px}.move-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end}.edit-small,.delete-small{min-height:34px;padding:7px 10px;font-size:12px}.edit-small{background:#eff6ff;color:var(--blue)}.delete-small{background:#fff0ef;color:var(--red)}
 .month-block{border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:9px;background:#fff}.month-block.warn{border-left:5px solid var(--orange)}.month-block.err{border-left:5px solid var(--red)}.month-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.month-head strong{font-size:15px}.goal{border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:9px}.goal-head{display:flex;justify-content:space-between;gap:10px}.goalbar{height:10px;background:#eceff1;border-radius:20px;overflow:hidden;margin:9px 0}.goalfill{height:100%;background:var(--green)}.tag{display:inline-flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:750;background:#f3f4f6;color:#4b5563}.tag.in{background:#ecfdf3;color:var(--green)}.tag.out{background:#fff1f0;color:var(--red)}.tag.rec{background:#eff6ff;color:var(--blue)}.tag.auto{background:#f5f3ff;color:#6d28d9}
 .search-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:9px}.search-total{font-weight:800;margin-top:10px}.search-table{margin-top:10px}.planned-list{display:flex;flex-direction:column;gap:8px}.planned-item{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.planned-item:last-child{border-bottom:0}.planned-main{min-width:0}.planned-main strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.family-member{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.pig{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:22px}.family-member-main{display:flex;align-items:center;gap:10px}.budget-item{padding:10px 0;border-bottom:1px solid var(--line)}.budget-item:last-child{border-bottom:0}.budget-head{display:flex;justify-content:space-between;gap:10px}.budget-actions{display:flex;gap:6px;margin-top:7px}.budget-actions button{min-height:36px;padding:7px 10px;font-size:12px}
+.family-member{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}.pig{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:22px}.family-member-main{display:flex;align-items:center;gap:10px}
+.loan-card{border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:9px;background:#fff}
+.loan-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.loan-title{font-weight:800}
+.loan-meta{font-size:12px;color:var(--muted);margin-top:3px}
+.loan-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.loan-actions button{min-height:34px;padding:7px 10px;font-size:12px}
+.loan-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.loan-summary .metric{padding:10px}
+.loan-balance{font-size:18px;font-weight:800}
+.loan-status{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:750}
+.loan-status.pending{background:#fff7ed;color:#b45309}
+.loan-status.partial{background:#eff6ff;color:#2563eb}
+.loan-status.paid{background:#ecfdf3;color:#16834b}
+.loan-status.overdue{background:#fff0ef;color:#c0392b}.budget-item{padding:10px 0;border-bottom:1px solid var(--line)}.budget-item:last-child{border-bottom:0}.budget-head{display:flex;justify-content:space-between;gap:10px}.budget-actions{display:flex;gap:6px;margin-top:7px}.budget-actions button{min-height:36px;padding:7px 10px;font-size:12px}
 .modal{position:fixed;inset:0;background:rgba(15,23,42,.48);display:flex;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.hidden{display:none}.modalbox{width:min(620px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.2)}.modalbox h2{margin:0 0 6px}.modalbox p{margin:0 0 15px;color:var(--muted);font-size:13px}.detail-list{display:flex;flex-direction:column;gap:8px;max-height:55vh;overflow:auto}.detail-item{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}.detail-main{min-width:0}.detail-main strong{display:block;overflow-wrap:anywhere}.detail-value{white-space:nowrap;font-weight:800}.photo-preview{width:100%;max-height:280px;object-fit:contain;border:1px solid var(--line);border-radius:14px;margin-top:8px;background:#f8fafc}.ocr-text{white-space:pre-wrap;max-height:180px;overflow:auto;background:#f8fafc;padding:10px;border-radius:12px;font-size:12px;color:var(--muted)}
 .sync-actions{display:flex;gap:8px;flex-wrap:wrap}.sync-actions button{min-height:40px;padding:9px 12px;font-size:13px}.useremail{max-width:210px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bottom-space{height:8px}@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}.grid4{grid-template-columns:repeat(4,1fr)}.form{grid-template-columns:repeat(4,1fr)}.full{grid-column:1/-1}.form .full+.primary{grid-column:1/-1}}@media(max-width:649px){.projection-grid{grid-template-columns:1fr 1fr}.projection-grid .metric:last-child{grid-column:1/-1}.search-grid{grid-template-columns:1fr 1fr}.search-grid .wide{grid-column:1/-1}.tabs{top:4px}}
@@ -86,6 +100,34 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
 
 <div id="photoModal" class="modal hidden"><div class="modalbox"><h2>📷 Foto de factura</h2><p>SaveT intentará leer el total, la fecha y el comercio. Revisa los datos antes de guardar el gasto.</p><img id="photoPreview" class="photo-preview" alt="Vista previa de factura"><div id="ocrStatus" class="notice">Procesando…</div><div id="ocrText" class="ocr-text" style="display:none"></div><div class="actions" style="margin-top:14px"><button id="closePhoto" class="secondary">Cerrar</button></div></div></div>
 
+
+<div id="loanModal" class="modal hidden"><div class="modalbox">
+  <h2>🤝 Nuevo préstamo</h2>
+  <p>El préstamo queda separado de tus ingresos y gastos. Los abonos actualizan únicamente el saldo pendiente.</p>
+  <div class="form">
+    <div><label>Tipo</label><select id="loanDirection"><option value="toMe">Me prestan</option><option value="fromMe">Yo presto</option></select></div>
+    <div><label>Persona</label><select id="loanPerson"></select></div>
+    <div class="full" id="externalPersonWrap" style="display:none"><label>Nombre de la persona externa</label><input id="loanExternalPerson" maxlength="60" placeholder="Ej. Carlos"></div>
+    <div><label>Monto (COP)</label><input id="loanAmount" type="number" min="1" step="1000" placeholder="0"></div>
+    <div><label>Fecha</label><input id="loanDate" type="date"></div>
+    <div><label>Fecha límite <span class="small">(opcional)</span></label><input id="loanDueDate" type="date"></div>
+    <div class="full"><label>Concepto</label><input id="loanConcept" maxlength="100" placeholder="Ej. Mercado, emergencia, compra..."></div>
+  </div>
+  <div id="loanNotice" class="notice" style="display:none"></div>
+  <div class="actions" style="margin-top:14px"><button id="saveLoan">Guardar préstamo</button><button id="closeLoan" class="secondary">Cancelar</button></div>
+</div></div>
+
+<div id="loanPaymentModal" class="modal hidden"><div class="modalbox">
+  <h2>💵 Registrar abono</h2>
+  <p id="loanPaymentTitle"></p>
+  <div class="form">
+    <div><label>Valor del abono (COP)</label><input id="loanPaymentAmount" type="number" min="1" step="1000"></div>
+    <div><label>Fecha</label><input id="loanPaymentDate" type="date"></div>
+  </div>
+  <div id="loanPaymentNotice" class="notice" style="display:none"></div>
+  <div class="actions" style="margin-top:14px"><button id="saveLoanPayment">Registrar abono</button><button id="closeLoanPayment" class="secondary">Cancelar</button></div>
+</div></div>
+
 <div id="loginModal" class="modal hidden"><div class="modalbox"><h2>🔐 Entrar a SaveT</h2><p>Usa el correo y la contraseña que creaste en Supabase.</p><div class="field"><label>Correo electrónico</label><input id="email" type="email" autocomplete="email" placeholder="tu correo"></div><div class="field"><label>Contraseña</label><input id="password" type="password" autocomplete="current-password" placeholder="Tu contraseña"></div><div id="loginError" class="notice" style="display:none"></div><div class="actions"><button id="doLogin">Entrar</button><button id="closeLogin" class="secondary">Cancelar</button></div></div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -93,7 +135,7 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
 const SUPABASE_URL="https://jfieskoytxouxrsmdowb.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_w4MgOhH27uZTgZtNOSxpUQ_NtMOqplx";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-const KEY="mis-finanzas-v1", PLAN_KEY="mis-finanzas-plan-v1", GOAL_KEY="savet-goals-v1", BUDGET_KEY="savet-budgets-v1", FAMILY_KEY="savet-family-v1";
+const KEY="mis-finanzas-v1", PLAN_KEY="mis-finanzas-plan-v1", GOAL_KEY="savet-goals-v1", BUDGET_KEY="savet-budgets-v1", FAMILY_KEY="savet-family-v1", LOAN_KEY="savet-loans-v1";
 const $=id=>document.getElementById(id);
 function todayLocal(){
   const d=new Date();
@@ -105,6 +147,7 @@ let planned=JSON.parse(localStorage.getItem(PLAN_KEY)||'[]');
 let goals=JSON.parse(localStorage.getItem(GOAL_KEY)||'[]');
 let budgets=JSON.parse(localStorage.getItem(BUDGET_KEY)||'[]');
 let family=JSON.parse(localStorage.getItem(FAMILY_KEY)||'{"enabled":false,"name":"Mi familia","members":[]}');
+let loans=JSON.parse(localStorage.getItem(LOAN_KEY)||'[]');
 if(!Array.isArray(budgets)){budgets=Object.entries(budgets||{}).map(([name,amount])=>({id:crypto.randomUUID(),name,amount:Number(amount)||0,period:'monthly'}));localStorage.setItem(BUDGET_KEY,JSON.stringify(budgets));}
 let currentUser=null, editingMoveId=null, editingPlanId=null, editingBudgetCategory=null, editingGoalId=null, contributionGoalId=null;
 const categories=["Alimentación","Vivienda","Transporte","Servicios","Salud","Educación","Deudas","Ocio","Compras","Ahorro","Trabajo","Otros"];
@@ -125,7 +168,7 @@ function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function savePlanned(){localStorage.setItem(PLAN_KEY,JSON.stringify(planned));render()}
 function saveGoals(){localStorage.setItem(GOAL_KEY,JSON.stringify(goals));render()}
 function saveBudgets(){localStorage.setItem(BUDGET_KEY,JSON.stringify(budgets));render()}
-function normalize(){state.moves=(state.moves||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));planned=(planned||[]).map(x=>({...x,id:x.id||crypto.randomUUID(),rec:x.rec||'none',every:Number(x.every)||1,endType:x.endType||'never',endValue:x.endValue||null,caused:x.caused||[]}));goals=goals||[];budgets=Array.isArray(budgets)?budgets:[]}
+function normalize(){state.moves=(state.moves||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));planned=(planned||[]).map(x=>({...x,id:x.id||crypto.randomUUID(),rec:x.rec||'none',every:Number(x.every)||1,endType:x.endType||'never',endValue:x.endValue||null,caused:x.caused||[]}));goals=goals||[];budgets=Array.isArray(budgets)?budgets:[];loans=Array.isArray(loans)?loans:[]}
 function currentMonth(){return today.slice(0,7)}
 function monthMoves(ym){return state.moves.filter(x=>x.date&&x.date.slice(0,7)===ym&&x.date<=today)}
 function sum(items,type){return items.filter(x=>x.type===type).reduce((a,x)=>a+Number(x.value),0)}
@@ -221,8 +264,18 @@ function renderFamily(){
     <button id="addFamilyMember">Agregar integrante</button>
   </div>
   <div style="margin-top:12px">${members.length?members.map(m=>`<div class="family-member"><div class="family-member-main"><div class="pig" style="background:${({blue:'#dbeafe',green:'#dcfce7',orange:'#ffedd5',purple:'#ede9fe',pink:'#fce7f3'}[m.color]||'#e5e7eb')}">🐷</div><div><strong>${esc(m.name)}</strong><div class="small">Integrante del grupo</div></div></div><button class="delete-small" onclick="removeFamilyMember('${m.id}')">Eliminar</button></div>`).join(''):'<div class="empty">Agrega los integrantes que compartirán la información familiar.</div>'}</div>
-  <div class="notice">ℹ️ Esta primera versión guarda el grupo familiar en este dispositivo. La sincronización familiar entre varios dispositivos requiere tablas adicionales en Supabase.</div>`;
+  <div class="notice">ℹ️ Esta primera versión guarda el grupo familiar y los préstamos en este dispositivo. La sincronización familiar entre varios dispositivos requiere tablas adicionales en Supabase.</div>
+  <div style="margin-top:14px">
+    <div class="row"><div><h3 style="margin:0;font-size:16px">🤝 Préstamos</h3><div class="small">Controla préstamos entre integrantes o con personas externas sin convertirlos automáticamente en ingresos o gastos.</div></div><button id="newLoan" class="secondary">Nuevo préstamo</button></div>
+    <div class="loan-summary">
+      <div class="metric"><div class="label">Te deben</div><strong id="loanOwedToMe">$0</strong></div>
+      <div class="metric"><div class="label">Debes</div><strong id="loanIOwe">$0</strong></div>
+    </div>
+    <div id="loansList"></div>
+  </div>`;
   $('saveFamilyName').onclick=()=>{family.name=$('familyName').value.trim()||'Mi familia';saveFamily()};
+  $('newLoan').onclick=openLoanModal;
+  renderLoans();
   $('addFamilyMember').onclick=()=>{const name=$('familyMemberName').value.trim();if(!name){alert('Escribe el nombre del integrante.');return}family.members.push({id:crypto.randomUUID(),name,color:$('familyMemberColor').value});saveFamily()};
 }
 function refreshMemberSelect(){
@@ -232,6 +285,70 @@ function refreshMemberSelect(){
   s.value=old;
 }
 window.removeFamilyMember=id=>{family.members=(family.members||[]).filter(m=>m.id!==id);saveFamily()};
+
+
+function saveLoans(){localStorage.setItem(LOAN_KEY,JSON.stringify(loans));renderFamily()}
+function loanPersonName(l){
+  if(l.personType==='external') return l.personName||'Persona externa';
+  const m=(family.members||[]).find(x=>x.id===l.personId);
+  return m?.name||'Integrante';
+}
+function loanPaid(l){return (l.payments||[]).reduce((a,p)=>a+Number(p.value||0),0)}
+function loanBalance(l){return Math.max(0,Number(l.amount||0)-loanPaid(l))}
+function loanStatus(l){
+  const bal=loanBalance(l);
+  if(bal<=0)return ['paid','Pagado'];
+  if(l.dueDate && l.dueDate<today)return ['overdue','Vencido'];
+  if(loanPaid(l)>0)return ['partial','Abono parcial'];
+  return ['pending','Pendiente'];
+}
+function renderLoans(){
+  const list=$('loansList'),toMe=loans.filter(l=>l.direction==='toMe').reduce((a,l)=>a+loanBalance(l),0),fromMe=loans.filter(l=>l.direction==='fromMe').reduce((a,l)=>a+loanBalance(l),0);
+  if($('loanOwedToMe'))$('loanOwedToMe').textContent=money(toMe);
+  if($('loanIOwe'))$('loanIOwe').textContent=money(fromMe);
+  if(!list)return;
+  list.innerHTML=loans.length?loans.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(l=>{
+    const bal=loanBalance(l), paid=loanPaid(l), st=loanStatus(l), arrow=l.direction==='toMe'?'←':'→';
+    return `<div class="loan-card">
+      <div class="loan-head"><div><div class="loan-title">${l.direction==='toMe'?'💰 Me prestan':'💸 Yo presto'} ${arrow} ${esc(loanPersonName(l))}</div>
+      <div class="loan-meta">${esc(l.date)} · ${esc(l.concept||'Sin concepto')}${l.dueDate?' · vence '+esc(l.dueDate):''}</div></div>
+      <span class="loan-status ${st[0]}">${st[1]}</span></div>
+      <div class="loan-summary"><div class="metric"><div class="label">Monto original</div><strong>${money(l.amount)}</strong></div><div class="metric"><div class="label">Pendiente</div><strong class="loan-balance">${money(bal)}</strong></div></div>
+      <div class="small" style="margin-top:7px">Abonado: ${money(paid)}</div>
+      <div class="loan-actions">${bal>0?`<button class="bluebtn" onclick="addLoanPayment('${l.id}')">💵 Abonar</button>`:''}<button class="delete-small" onclick="deleteLoan('${l.id}')">Eliminar</button></div>
+    </div>`;
+  }).join(''):'<div class="empty">No hay préstamos registrados.</div>';
+}
+function refreshLoanPersonSelect(){
+  const s=$('loanPerson'); if(!s)return;
+  s.innerHTML='<option value="">Seleccionar integrante</option>'+((family.members||[]).map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join(''))+'<option value="external">👤 Persona externa</option>';
+}
+function openLoanModal(){
+  refreshLoanPersonSelect();
+  $('loanDirection').value='toMe';$('loanPerson').value='';$('loanExternalPerson').value='';$('loanAmount').value='';$('loanDate').value=today;$('loanDueDate').value='';$('loanConcept').value='';$('loanNotice').style.display='none';$('externalPersonWrap').style.display='none';$('loanModal').classList.remove('hidden');
+}
+function updateLoanPerson(){
+  $('externalPersonWrap').style.display=$('loanPerson').value==='external'?'block':'none';
+}
+function saveLoan(){
+  const direction=$('loanDirection').value, person=$('loanPerson').value, external=$('loanExternalPerson').value.trim(), amount=Number($('loanAmount').value), date=$('loanDate').value, due=$('loanDueDate').value, concept=$('loanConcept').value.trim();
+  if(!person || (person==='external'&&!external) || !amount || amount<1 || !date || !concept){$('loanNotice').textContent='Completa persona, monto, fecha y concepto.';$('loanNotice').style.display='block';return}
+  if(due && due<date){$('loanNotice').textContent='La fecha límite no puede ser anterior a la fecha del préstamo.';$('loanNotice').style.display='block';return}
+  loans.push({id:crypto.randomUUID(),direction,personType:person==='external'?'external':'member',personId:person==='external'?null:person,personName:person==='external'?external:null,amount,date,dueDate:due||null,concept,payments:[]});
+  localStorage.setItem(LOAN_KEY,JSON.stringify(loans));$('loanModal').classList.add('hidden');renderFamily();
+}
+window.addLoanPayment=function(id){
+  const l=loans.find(x=>x.id===id);if(!l)return;
+  $('loanPaymentTitle').textContent=`${l.direction==='toMe'?'Te deben':'Debes'} ${money(loanBalance(l))} · ${loanPersonName(l)}`;
+  $('loanPaymentAmount').value='';$('loanPaymentDate').value=today;$('loanPaymentNotice').style.display='none';window._loanPaymentId=id;$('loanPaymentModal').classList.remove('hidden');
+}
+function saveLoanPayment(){
+  const l=loans.find(x=>x.id===window._loanPaymentId),v=Number($('loanPaymentAmount').value),d=$('loanPaymentDate').value;
+  if(!l||!v||v<1||!d){$('loanPaymentNotice').textContent='Completa valor y fecha.';$('loanPaymentNotice').style.display='block';return}
+  const bal=loanBalance(l);if(v>bal){$('loanPaymentNotice').textContent=`El abono no puede superar el saldo pendiente de ${money(bal)}.`;$('loanPaymentNotice').style.display='block';return}
+  l.payments=l.payments||[];l.payments.push({id:crypto.randomUUID(),value:v,date:d});localStorage.setItem(LOAN_KEY,JSON.stringify(loans));$('loanPaymentModal').classList.add('hidden');renderFamily();
+}
+window.deleteLoan=function(id){if(!confirm('¿Eliminar este préstamo y sus abonos?'))return;loans=loans.filter(l=>l.id!==id);saveLoans()};
 
 function setSyncStatus(kind,text){$('syncStatus').innerHTML=`<span class="dot ${kind}"></span><span>${esc(text)}</span>`}
 function cloudRow(x){return {id:x.id,user_id:currentUser.id,tipo:x.type,categoria:x.cat,fecha:x.date,valor:Number(x.value),concepto:x.concept||null,updated_at:new Date().toISOString()}}
@@ -268,6 +385,12 @@ function findMerchant(text){const lines=text.split(/\n+/).map(s=>s.trim()).filte
 $('photoBtn').onclick=()=>$('receiptInput').click();$('receiptInput').onchange=e=>{const f=e.target.files?.[0];if(f)analyzeReceipt(f)};$('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
 $('add').onclick=async()=>{const v=Number($('valor').value),c=$('concepto').value.trim(),date=$('fecha').value;if(!v||v<1||!c||!date){alert('Completa fecha, concepto y valor.');return}state.moves.push({id:crypto.randomUUID(),type:$('tipo').value,cat:$('categoria').value,date,value:v,concept:c,budgetId:$('movBudget').value||null,memberId:family.enabled?($('moveMember').value||null):null});save();refreshBudgetSelects();$('movBudget').value='';$('valor').value='';$('concepto').value='';await syncMovesIfPossible()};
 $('familyToggle').onclick=()=>{family.enabled=!family.enabled;saveFamily()};
+$('closeLoan').onclick=()=>$('loanModal').classList.add('hidden');
+$('closeLoanPayment').onclick=()=>$('loanPaymentModal').classList.add('hidden');
+$('loanPerson').onchange=updateLoanPerson;
+$('saveLoan').onclick=saveLoan;
+$('saveLoanPayment').onclick=saveLoanPayment;
+
 $('newPlan').onclick=()=>openPlan();$('savePlan').onclick=savePlan;$('closePlan').onclick=()=>$('planModal').classList.add('hidden');$('pEndType').onchange=updateEndInput;
 $('newBudget').onclick=()=>openBudget();$('saveBudget').onclick=saveBudget;$('closeBudget').onclick=()=>$('budgetModal').classList.add('hidden');
 $('newGoal').onclick=()=>openGoal();$('newGoal2').onclick=()=>openGoal();$('saveGoal').onclick=saveGoal;$('closeGoal').onclick=()=>$('goalModal').classList.add('hidden');$('saveContrib').onclick=saveContribution;$('closeContrib').onclick=()=>$('contribModal').classList.add('hidden');
