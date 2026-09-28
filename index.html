@@ -106,7 +106,7 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
   <p>El préstamo queda separado de tus ingresos y gastos. Los abonos actualizan únicamente el saldo pendiente.</p>
   <div class="form">
     <div><label>Tipo</label><select id="loanDirection"><option value="toMe">Me prestan</option><option value="fromMe">Yo presto</option></select></div>
-    <div><label>Persona</label><select id="loanPerson"></select></div>
+    <div><label>Persona</label><select id="loanPerson"><option value="">👤 Seleccionar persona</option></select></div>
     <div class="full" id="externalPersonWrap" style="display:none"><label>Nombre de la persona externa</label><input id="loanExternalPerson" maxlength="60" placeholder="Ej. Carlos"></div>
     <div><label>Monto (COP)</label><input id="loanAmount" type="number" min="1" step="1000" placeholder="0"></div>
     <div><label>Fecha</label><input id="loanDate" type="date"></div>
@@ -321,7 +321,7 @@ function renderLoans(){
 }
 function refreshLoanPersonSelect(){
   const s=$('loanPerson'); if(!s)return;
-  s.innerHTML='<option value="">Seleccionar integrante</option>'+((family.members||[]).map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join(''))+'<option value="external">👤 Persona externa</option>';
+  s.innerHTML='<option value="">👤 Seleccionar persona</option>'+((family.members||[]).map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join(''))+'<option value="external">👤 Persona externa</option>';
 }
 function openLoanModal(){
   refreshLoanPersonSelect();
