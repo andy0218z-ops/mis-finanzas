@@ -298,22 +298,30 @@ async function connectFamilyCloud(){
       p_color: 'blue'
     });
     if(error) throw error;
-    if(!data?.familia_id) throw new Error('Supabase no devolvió el identificador de la familia.');
-    family.cloudFamilyId=data.familia_id;
+    // Supabase puede entregar JSONB como objeto o, según el cliente/proxy, como texto.
+    let result=data;
+    if(typeof result==='string'){
+      try{result=JSON.parse(result)}catch{}
+    }
+    if(Array.isArray(result)) result=result[0];
+    if(!result?.familia_id) throw new Error('Supabase no devolvió el identificador de la familia.');
+    family.cloudFamilyId=result.familia_id;
     family.cloudConnected=true;
     family.cloudRole='admin';
-    family.cloudMemberId=data.miembro_id||null;
+    family.cloudMemberId=result.miembro_id||null;
     family.ownerName=visibleName.trim();
+    const me=(family.members||[]).find(m=>m.isMe);
+    if(me){me.cloud=true;me.cloudId=family.cloudMemberId;me.name=visibleName.trim()}
     localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
-    await refreshCloudFamily();
+    // La creación ya fue confirmada por la RPC. La lectura de integrantes es secundaria:
+    // si una política RLS impide leerla todavía, no debemos marcar Familia como desconectada.
+    try{await refreshCloudFamily()}catch(refreshErr){console.warn('SaveT family refresh after connect',refreshErr)}
     renderFamily();refreshMemberSelect();
     setSyncStatus('ok','Familia conectada a la nube');
   }catch(e){
     console.error('SaveT family connect error',e);
     const msg=e?.message||e?.details||e?.hint||'Error desconocido';
-    alert('No se pudo conectar Familia a la nube.
-
-Detalle: '+msg);
+    alert('No se pudo conectar Familia a la nube.\n\nDetalle: '+msg);
     setSyncStatus('ok','Nube de movimientos conectada · Familia pendiente de conexión');
   }
 }
