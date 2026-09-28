@@ -303,7 +303,7 @@ function loanStatus(l){
   return ['pending','Pendiente'];
 }
 function renderLoans(){
-  const list=$('loansList'),toMe=loans.filter(l=>l.direction==='toMe').reduce((a,l)=>a+loanBalance(l),0),fromMe=loans.filter(l=>l.direction==='fromMe').reduce((a,l)=>a+loanBalance(l),0);
+  const list=$('loansList'),toMe=loans.filter(l=>l.direction==='fromMe').reduce((a,l)=>a+loanBalance(l),0),fromMe=loans.filter(l=>l.direction==='toMe').reduce((a,l)=>a+loanBalance(l),0);
   if($('loanOwedToMe'))$('loanOwedToMe').textContent=money(toMe);
   if($('loanIOwe'))$('loanIOwe').textContent=money(fromMe);
   if(!list)return;
