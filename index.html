@@ -95,7 +95,11 @@ const SUPABASE_PUBLISHABLE_KEY="sb_publishable_w4MgOhH27uZTgZtNOSxpUQ_NtMOqplx";
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
 const KEY="mis-finanzas-v1", PLAN_KEY="mis-finanzas-plan-v1", GOAL_KEY="savet-goals-v1", BUDGET_KEY="savet-budgets-v1", FAMILY_KEY="savet-family-v1";
 const $=id=>document.getElementById(id);
-const today=new Date().toISOString().slice(0,10);
+function todayLocal(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+const today=todayLocal();
 let state=JSON.parse(localStorage.getItem(KEY)||'{"moves":[],"budget":0}');
 let planned=JSON.parse(localStorage.getItem(PLAN_KEY)||'[]');
 let goals=JSON.parse(localStorage.getItem(GOAL_KEY)||'[]');
@@ -145,7 +149,7 @@ function ensureDueProjections(){
 }
 function render(){normalize();ensureDueProjections();refreshBudgetSelects();renderSummary();renderMoves();renderPlans();renderProjection();renderBudgets();renderGoals();renderFamily();refreshMemberSelect();refreshSearchCategories();renderSearch();bindClicks()}
 function renderSummary(){
- const ym=currentMonth(), mm=monthMoves(ym), inc=sum(mm,'ingreso'), exp=sum(mm,'gasto'), bal=realBalance(), saved=Math.max(0,bal-totalGoalContrib());
+ const ym=currentMonth(), mm=realMoves().filter(x=>x.date.slice(0,7)===ym), inc=sum(mm,'ingreso'), exp=sum(mm,'gasto'), bal=realBalance(), saved=Math.max(0,bal-totalGoalContrib());
  $('saldo').textContent=money(bal);$('ingresos').textContent=money(inc);$('gastos').textContent=money(exp);$('ahorro').textContent=money(saved);$('monthLabel').textContent=new Date(ym+'-01T12:00:00').toLocaleDateString('es-CO',{month:'long',year:'numeric'});
  const cats={};mm.filter(x=>x.type==='gasto').forEach(x=>cats[x.cat]=(cats[x.cat]||0)+Number(x.value));
  $('cats').innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="catrow clickable" data-category="${esc(k)}" role="button" tabindex="0"><span>${esc(k)}</span><strong>${money(v)}</strong></div>`).join('')||'<div class="empty">No hay gastos en el mes seleccionado.</div>';
@@ -230,12 +234,31 @@ function refreshMemberSelect(){
 window.removeFamilyMember=id=>{family.members=(family.members||[]).filter(m=>m.id!==id);saveFamily()};
 
 function setSyncStatus(kind,text){$('syncStatus').innerHTML=`<span class="dot ${kind}"></span><span>${esc(text)}</span>`}
-function cloudRow(x){return {id:x.id,user_id:currentUser.id,tipo:x.type,categoria:x.cat,fecha:x.date,valor:Number(x.value),concepto:x.concept||null,created_at:x.created_at,updated_at:new Date().toISOString(),presupuesto_id:x.budgetId||null}}
-function localFromCloud(r){return {id:r.id,type:r.tipo,cat:r.categoria||'Otros',date:r.fecha,value:Number(r.valor),concept:r.concepto||'',budgetId:r.presupuesto_id||null}}
-async function pushLocalMoves(){if(!currentUser)return 0;normalize();if(!state.moves.length)return 0;let {error}=await supabaseClient.from('movimientos').upsert(state.moves.map(cloudRow),{onConflict:'id'});if(error){const rows=state.moves.map(x=>{const r=cloudRow(x);delete r.presupuesto_id;return r});const retry=await supabaseClient.from('movimientos').upsert(rows,{onConflict:'id'});if(retry.error)throw retry.error}return state.moves.length}
-async function pullCloudMoves(){if(!currentUser)return 0;const {data,error}=await supabaseClient.from('movimientos').select('id,user_id,tipo,categoria,fecha,valor,concepto,presupuesto_id').order('fecha',{ascending:false});if(error)throw error;const map=new Map(state.moves.map(x=>[x.id,x]));for(const r of data||[])map.set(r.id,localFromCloud(r));state.moves=[...map.values()];localStorage.setItem(KEY,JSON.stringify(state));render();return (data||[]).length}
+function cloudRow(x){return {id:x.id,user_id:currentUser.id,tipo:x.type,categoria:x.cat,fecha:x.date,valor:Number(x.value),concepto:x.concept||null,updated_at:new Date().toISOString()}}
+function localFromCloud(r){const old=state.moves.find(x=>x.id===r.id);return {id:r.id,type:r.tipo,cat:r.categoria||'Otros',date:r.fecha,value:Number(r.valor),concept:r.concepto||'',budgetId:old?.budgetId||null,memberId:old?.memberId||null}}
+async function pushLocalMoves(){
+  if(!currentUser)return 0;
+  normalize();
+  if(!state.moves.length)return 0;
+  const {error}=await supabaseClient.from('movimientos').upsert(state.moves.map(cloudRow),{onConflict:'id'});
+  if(error)throw error;
+  return state.moves.length;
+}
+async function pullCloudMoves(){if(!currentUser)return 0;const {data,error}=await supabaseClient.from('movimientos').select('id,user_id,tipo,categoria,fecha,valor,concepto').order('fecha',{ascending:false});if(error)throw error;const map=new Map(state.moves.map(x=>[x.id,x]));for(const r of data||[])map.set(r.id,localFromCloud(r));state.moves=[...map.values()];localStorage.setItem(KEY,JSON.stringify(state));render();return (data||[]).length}
 async function syncMovesIfPossible(){if(!currentUser)return;try{setSyncStatus('warn','Sincronizando…');await pushLocalMoves();await pullCloudMoves();setSyncStatus('ok',`Nube conectada · ${state.moves.length} movimientos`)}catch(e){setSyncStatus('err','Guardado local · nube pendiente')}}
-async function syncNow(){if(!currentUser)return;try{setSyncStatus('warn','Sincronizando…');const up=await pushLocalMoves(),down=await pullCloudMoves();setSyncStatus('ok',`Nube conectada · ${state.moves.length} movimientos`);$('syncNotice').textContent=`Sincronizado. ${up} enviados y ${down} recuperados.`}catch(e){setSyncStatus('err','Error de sincronización');$('syncNotice').textContent='No se pudo sincronizar ahora. Tus datos locales se conservaron; revisaremos la configuración de Supabase antes de la próxima publicación.'}}
+async function syncNow(){
+  if(!currentUser)return;
+  try{
+    setSyncStatus('warn','Sincronizando…');
+    const up=await pushLocalMoves(),down=await pullCloudMoves();
+    setSyncStatus('ok',`Nube conectada · ${state.moves.length} movimientos`);
+    $('syncNotice').textContent=`Sincronizado. ${up} enviados y ${down} recuperados.`;
+  }catch(e){
+    console.error('SaveT sync error',e);
+    setSyncStatus('err','Error de sincronización');
+    $('syncNotice').textContent='No se pudo sincronizar. Tus datos locales se conservaron.';
+  }
+}
 async function handleSession(session){currentUser=session?.user||null;if(currentUser){$('userLine').textContent=currentUser.email||'Cuenta conectada';$('loginBtn').style.display='none';$('syncBtn').style.display='inline-block';$('logoutBtn').style.display='inline-block';setSyncStatus('warn','Conectando…');try{await syncNow()}catch(e){setSyncStatus('err','No se pudo conectar')}}else{$('userLine').textContent='Solo en este dispositivo';$('loginBtn').style.display='inline-block';$('syncBtn').style.display='none';$('logoutBtn').style.display='none';setSyncStatus('','Sin iniciar sesión')}}
 async function analyzeReceipt(file){$('photoModal').classList.remove('hidden');$('photoPreview').src=URL.createObjectURL(file);$('ocrStatus').textContent='Preparando lectura de la factura…';$('ocrText').style.display='none';try{if(!window.Tesseract){const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';document.head.appendChild(s);await new Promise((res,rej)=>{s.onload=res;s.onerror=rej})}$('ocrStatus').textContent='Leyendo factura… puede tardar unos segundos.';const result=await Tesseract.recognize(file,'spa',{logger:m=>{if(m.status==='recognizing text'&&m.progress) $('ocrStatus').textContent=`Leyendo factura… ${Math.round(m.progress*100)}%`}});const text=result.data.text||'';$('ocrText').textContent=text||'No se pudo leer texto.';$('ocrText').style.display='block';const total=findReceiptTotal(text);const date=findReceiptDate(text);const merchant=findMerchant(text);if(total){$('valor').value=total;$('ocrStatus').textContent=`✅ Total detectado: ${money(total)}. Revisa y confirma.`}else{$('ocrStatus').textContent='No encontré un total con suficiente confianza. Puedes escribirlo manualmente.'}if(date)$('fecha').value=date;if(merchant&&!$('concepto').value.trim())$('concepto').value=merchant.slice(0,100)}catch(e){console.error(e);$('ocrStatus').textContent='No fue posible leer la factura. Puedes cerrar y registrar el gasto manualmente.'}}
 function findReceiptTotal(text){const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);const candidates=[];for(const line of lines){if(/\b(total|total a pagar|importe|pagar|neto)\b/i.test(line)){const nums=line.match(/(?:\$\s*)?\d[\d.\s,]{1,}/g)||[];for(const n of nums){const v=parseMoneyCandidate(n);if(v>0)candidates.push(v)}}}if(candidates.length)return Math.max(...candidates);const all=text.match(/(?:\$\s*)?\d[\d.\s,]{2,}/g)||[];const vals=all.map(parseMoneyCandidate).filter(v=>v>0&&v<100000000);return vals.length?Math.max(...vals):0}
