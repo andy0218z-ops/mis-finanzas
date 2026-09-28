@@ -63,7 +63,8 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
 <div><label>Tipo</label><select id="tipo"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div><div><label>Categoría</label><select id="categoria"><option>Alimentación</option><option>Vivienda</option><option>Transporte</option><option>Servicios</option><option>Salud</option><option>Educación</option><option>Deudas</option><option>Ocio</option><option>Compras</option><option>Ahorro</option><option>Trabajo</option><option>Otros</option></select></div><div><label>Fecha</label><input id="fecha" type="date"></div><div><label>Valor (COP)</label><input id="valor" type="number" min="1" step="1000" placeholder="0"></div>
 <div class="full"><label>Concepto</label><input id="concepto" maxlength="100" placeholder="Ej. Mercado, arriendo, nómina..."></div>
 <div class="full"><label>Presupuesto para <span class="small">(opcional)</span></label><select id="movBudget"><option value="">No asignar</option></select></div>
-<div class="full" id="moveMemberWrap" style="display:none"><label>👤 Registrado por</label><select id="moveMember"><option value="">Yo</option></select></div>
+<div><label>Ámbito</label><select id="moveScope"><option value="personal">👤 Personal</option><option value="family">👥 Familiar</option></select></div>
+<div class="full" id="moveMemberWrap" style="display:none"><label>👤 Registrado por</label><select id="moveMember"><option value="">Seleccionar integrante</option></select></div>
 <div class="full actions"><button id="photoBtn" type="button" class="secondary">📷 Foto de factura</button><input id="receiptInput" type="file" accept="image/*" capture="environment" style="display:none"></div>
 <button id="add" class="full">Guardar movimiento</button></div></section>
 <section class="section card"><div class="row"><div><h2>🔎 Consultar movimientos</h2><div class="small">Busca por concepto, categoría o fecha.</div></div><button id="clearSearch" class="secondary">Limpiar</button></div><div class="search-grid" style="margin-top:10px"><div class="wide"><label>Concepto</label><input id="searchConcept" placeholder="Ej. supermercado, gasolina..."></div><div><label>Categoría</label><select id="searchCategory"><option value="">Todas</option></select></div><div><label>Desde</label><input id="searchFrom" type="date"></div><div><label>Hasta</label><input id="searchTo" type="date"></div></div><div id="searchTotal" class="search-total">0 movimientos · $0</div><div class="table search-table"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Categoría</th><th>Concepto</th><th>Valor</th><th>Acciones</th></tr></thead><tbody id="searchRows"></tbody></table></div></section>
@@ -86,7 +87,9 @@ main{max-width:860px;margin:auto;padding:18px 14px 95px}.top{display:flex;justif
 </main>
 
 <div id="editModal" class="modal hidden"><div class="modalbox"><h2>✏️ Editar movimiento</h2><p>El registro histórico se conserva; solo se actualizan sus datos.</p><div class="form"><div><label>Tipo</label><select id="editTipo"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div><div><label>Categoría</label><select id="editCategoria"></select></div><div><label>Fecha</label><input id="editFecha" type="date"></div><div><label>Valor (COP)</label><input id="editValor" type="number" min="1" step="1000"></div><div class="full"><label>Concepto</label><input id="editConcepto" maxlength="100"></div>
-<div class="full"><label>Presupuesto para <span class="small">(opcional)</span></label><select id="editBudget"><option value="">No asignar</option></select></div></div><div id="editNotice" class="notice" style="display:none"></div><div class="actions" style="margin-top:14px"><button id="saveEdit">Guardar cambios</button><button id="closeEdit" class="secondary">Cancelar</button></div></div></div>
+<div class="full"><label>Presupuesto para <span class="small">(opcional)</span></label><select id="editBudget"><option value="">No asignar</option></select></div>
+<div><label>Ámbito</label><select id="editScope"><option value="personal">👤 Personal</option><option value="family">👥 Familiar</option></select></div>
+<div class="full" id="editMemberWrap" style="display:none"><label>👤 Registrado por</label><select id="editMember"><option value="">Seleccionar integrante</option></select></div></div><div id="editNotice" class="notice" style="display:none"></div><div class="actions" style="margin-top:14px"><button id="saveEdit">Guardar cambios</button><button id="closeEdit" class="secondary">Cancelar</button></div></div></div>
 
 <div id="detailModal" class="modal hidden"><div class="modalbox"><h2 id="detailTitle">Detalle</h2><p id="detailSubtitle">Movimientos que explican este valor.</p><div id="detailList" class="detail-list"></div><div id="detailSummary" class="notice"></div><div class="actions" style="margin-top:14px"><button id="closeDetail" class="secondary">Cerrar</button></div></div></div>
 
@@ -146,7 +149,7 @@ let state=JSON.parse(localStorage.getItem(KEY)||'{"moves":[],"budget":0}');
 let planned=JSON.parse(localStorage.getItem(PLAN_KEY)||'[]');
 let goals=JSON.parse(localStorage.getItem(GOAL_KEY)||'[]');
 let budgets=JSON.parse(localStorage.getItem(BUDGET_KEY)||'[]');
-let family=JSON.parse(localStorage.getItem(FAMILY_KEY)||'{"enabled":false,"name":"Mi familia","members":[]}');
+let family=JSON.parse(localStorage.getItem(FAMILY_KEY)||'{"enabled":false,"name":"Mi familia","members":[],"cloudFamilyId":null,"cloudConnected":false}');
 let loans=JSON.parse(localStorage.getItem(LOAN_KEY)||'[]');
 if(!Array.isArray(budgets)){budgets=Object.entries(budgets||{}).map(([name,amount])=>({id:crypto.randomUUID(),name,amount:Number(amount)||0,period:'monthly'}));localStorage.setItem(BUDGET_KEY,JSON.stringify(budgets));}
 let currentUser=null, editingMoveId=null, editingPlanId=null, editingBudgetCategory=null, editingGoalId=null, contributionGoalId=null;
@@ -168,7 +171,7 @@ function save(){localStorage.setItem(KEY,JSON.stringify(state));render()}
 function savePlanned(){localStorage.setItem(PLAN_KEY,JSON.stringify(planned));render()}
 function saveGoals(){localStorage.setItem(GOAL_KEY,JSON.stringify(goals));render()}
 function saveBudgets(){localStorage.setItem(BUDGET_KEY,JSON.stringify(budgets));render()}
-function normalize(){state.moves=(state.moves||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));planned=(planned||[]).map(x=>({...x,id:x.id||crypto.randomUUID(),rec:x.rec||'none',every:Number(x.every)||1,endType:x.endType||'never',endValue:x.endValue||null,caused:x.caused||[]}));goals=goals||[];budgets=Array.isArray(budgets)?budgets:[];loans=Array.isArray(loans)?loans:[]}
+function normalize(){state.moves=(state.moves||[]).map(x=>({...x,id:x.id||crypto.randomUUID()}));planned=(planned||[]).map(x=>({...x,id:x.id||crypto.randomUUID(),rec:x.rec||'none',every:Number(x.every)||1,endType:x.endType||'never',endValue:x.endValue||null,caused:x.caused||[]}));goals=goals||[];budgets=Array.isArray(budgets)?budgets:[];loans=Array.isArray(loans)?loans:[];state.moves=(state.moves||[]).map(x=>({...x,scope:x.scope||'personal'}))}
 function currentMonth(){return today.slice(0,7)}
 function monthMoves(ym){return state.moves.filter(x=>x.date&&x.date.slice(0,7)===ym&&x.date<=today)}
 function sum(items,type){return items.filter(x=>x.type===type).reduce((a,x)=>a+Number(x.value),0)}
@@ -200,7 +203,7 @@ function renderSummary(){
 }
 function renderHorizon(){const days=Number($('horizon').value||60),from=today,to=addDays(today,days),items=projectedItems(from,to),inc=sum(items,'ingreso'),exp=sum(items,'gasto'),base=realBalance(),bal=base+inc-exp;$('hIncome').textContent=money(inc);$('hExpense').textContent=money(exp);$('hBalance').textContent=money(bal);$('hStatus').className='notice '+(bal<0?'bad':bal<Math.max(0,exp*.5)?'warn':'good');$('hStatus').textContent=bal<0?'🔴 El saldo proyectado queda negativo en este periodo.':bal<Math.max(0,exp*.5)?'🟡 El margen proyectado es reducido.':'🟢 El saldo proyectado se mantiene positivo.'}
 function renderMoves(){const sorted=realMoves().sort((a,b)=>b.date.localeCompare(a.date));$('rows').innerHTML=sorted.map(moveRow).join('')||'<tr><td colspan="6" class="empty">No hay movimientos registrados.</td></tr>'}
-function moveRow(x){return `<tr><td>${esc(x.date)}</td><td><span class="tag ${x.type==='ingreso'?'in':'out'}">${x.type==='ingreso'?'Ingreso':'Gasto'}</span>${x.auto?'<span class="tag auto">Causado</span>':''}</td><td>${esc(x.cat)}</td><td>${esc(x.concept)}${x.memberId&&family.enabled&&family.members.find(m=>m.id===x.memberId)?`<div class="small">👤 ${esc(family.members.find(m=>m.id===x.memberId).name)}</div>`:''}</td><td class="${x.type==='ingreso'?'income':'expense'}">${x.type==='ingreso'?'+':'−'}${money(x.value)}</td><td><div class="move-actions"><button class="edit-small" onclick="editMove('${x.id}')">Editar</button><button class="delete-small" onclick="deleteMove('${x.id}')">Eliminar</button></div></td></tr>`}
+function moveRow(x){return `<tr><td>${esc(x.date)}</td><td><span class="tag ${x.type==='ingreso'?'in':'out'}">${x.type==='ingreso'?'Ingreso':'Gasto'}</span>${x.auto?'<span class="tag auto">Causado</span>':''}</td><td>${esc(x.cat)}</td><td>${esc(x.concept)}${x.scope==='family'?`<div class="small">👥 Familiar${x.memberId&&family.enabled&&family.members.find(m=>m.id===x.memberId)?` · 👤 ${esc(family.members.find(m=>m.id===x.memberId).name)}`:''}</div>`:`<div class="small">👤 Personal</div>`}</td><td class="${x.type==='ingreso'?'income':'expense'}">${x.type==='ingreso'?'+':'−'}${money(x.value)}</td><td><div class="move-actions"><button class="edit-small" onclick="editMove('${x.id}')">Editar</button><button class="delete-small" onclick="deleteMove('${x.id}')">Eliminar</button></div></td></tr>`}
 function renderSearch(){const q=($('searchConcept')?.value||'').trim().toLowerCase(),cat=$('searchCategory')?.value||'',from=$('searchFrom')?.value||'',to=$('searchTo')?.value||'';const found=state.moves.filter(x=>!q||String(x.concept||'').toLowerCase().includes(q)).filter(x=>!cat||x.cat===cat).filter(x=>!from||x.date>=from).filter(x=>!to||x.date<=to).sort((a,b)=>b.date.localeCompare(a.date));const total=found.reduce((a,x)=>a+Number(x.value),0);$('searchTotal').textContent=`${found.length} ${found.length===1?'movimiento':'movimientos'} · ${money(total)}`;$('searchRows').innerHTML=found.map(moveRow).join('')||'<tr><td colspan="6" class="empty">No hay movimientos que coincidan.</td></tr>'}
 function refreshSearchCategories(){const s=$('searchCategory'),cur=s.value,c=[...new Set(state.moves.map(x=>x.cat).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));s.innerHTML='<option value="">Todas</option>'+c.map(x=>`<option value="${esc(x)}">${esc(x)}</option>`).join('');if(c.includes(cur))s.value=cur}
 function renderPlans(){const from=today,to=addDays(today,90),items=projectedItems(from,to);$('plannedList').innerHTML=planned.length?planned.map(p=>{const next=occurrenceList(p,today,addDays(today,365))[0];const caused=(p.caused||[]).length;return `<div class="planned-item"><div class="planned-main"><strong>${esc(p.concept)}</strong><div class="small">${esc(p.cat)} · ${esc(recurrenceLabel(p))}${p.endType==='never'?' · sin fecha final':''}${p.budgetId&&budgets.find(b=>b.id===p.budgetId)?' · 💰 '+esc(budgets.find(b=>b.id===p.budgetId).name):''}</div><div class="small">${next?`Próxima: ${esc(next.date)}`:'Sin próximas ocurrencias'} · ${caused} causadas</div></div><div style="text-align:right"><div class="${p.type==='ingreso'?'income':'expense'}">${p.type==='ingreso'?'+':'−'}${money(p.value)}</div><div class="move-actions"><button class="edit-small" onclick="editPlan('${p.id}')">Editar</button><button class="delete-small" onclick="deletePlan('${p.id}')">Eliminar</button></div></div></div>`}).join(''):'<div class="empty">No hay proyecciones. Crea una para que SaveT las cause automáticamente al llegar la fecha.</div>';renderUpcoming(items)}
@@ -225,9 +228,9 @@ function openCategoryDetail(category){const ym=currentMonth(),items=monthMoves(y
 function openProjectionDetail(ym,type){const items=projectedItems(ym+'-01',addMonths(ym+'-01',1)),base=realBalance(),inc=sum(items,'ingreso'),exp=sum(items,'gasto');if(type==='saldo')detailItems(`Saldo proyectado: ${monthName(ym)}`,'Cálculo mensual.',items,`Saldo base ${money(base)} + ingresos ${money(inc)} − gastos ${money(exp)} = ${money(base+inc-exp)}`);else{const f=items.filter(x=>x.type===type);detailItems(`${type==='ingreso'?'Ingresos':'Gastos'} previstos: ${monthName(ym)}`,'Detalle de las proyecciones.',f,`Total: ${money(sum(f,type))}`)}}
 function bindClicks(){document.querySelectorAll('[data-detail]').forEach(el=>{if(el.dataset.bound)return;el.dataset.bound='1';el.addEventListener('click',()=>openSummaryDetail(el.dataset.detail));el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openSummaryDetail(el.dataset.detail)}})});document.querySelectorAll('[data-category]').forEach(el=>{el.onclick=()=>openCategoryDetail(el.dataset.category)});document.querySelectorAll('[data-proj-month]').forEach(el=>{el.onclick=()=>openProjectionDetail(el.dataset.projMonth,el.dataset.projType)})}
 function populateSelect(id,selected=''){const s=$(id);s.innerHTML=categories.map(c=>`<option ${c===selected?'selected':''}>${esc(c)}</option>`).join('')}
-function openEdit(id){const x=state.moves.find(m=>m.id===id);if(!x)return;editingMoveId=id;populateSelect('editCategoria',x.cat);$('editTipo').value=x.type;$('editFecha').value=x.date;$('editValor').value=x.value;$('editConcepto').value=x.concept||'';refreshBudgetSelects();$('editBudget').value=x.budgetId||'';$('editNotice').style.display='none';$('editModal').classList.remove('hidden')}
+function openEdit(id){const x=state.moves.find(m=>m.id===id);if(!x)return;editingMoveId=id;populateSelect('editCategoria',x.cat);$('editTipo').value=x.type;$('editFecha').value=x.date;$('editValor').value=x.value;$('editConcepto').value=x.concept||'';refreshBudgetSelects();$('editBudget').value=x.budgetId||'';$('editScope').value=x.scope||'personal';refreshEditMemberSelect();$('editMember').value=x.memberId||'';updateEditScopeUI();$('editNotice').style.display='none';$('editModal').classList.remove('hidden')}
 window.editMove=openEdit;
-async function saveEditedMove(){const x=state.moves.find(m=>m.id===editingMoveId);if(!x)return;const value=Number($('editValor').value),date=$('editFecha').value,concept=$('editConcepto').value.trim();if(!value||value<1||!date||!concept){$('editNotice').textContent='Completa fecha, concepto y valor.';$('editNotice').style.display='block';return}x.type=$('editTipo').value;x.cat=$('editCategoria').value;x.date=date;x.value=value;x.concept=concept;x.budgetId=$('editBudget').value||null;save();$('editModal').classList.add('hidden');await syncMovesIfPossible()}
+async function saveEditedMove(){const x=state.moves.find(m=>m.id===editingMoveId);if(!x)return;const value=Number($('editValor').value),date=$('editFecha').value,concept=$('editConcepto').value.trim(),scope=$('editScope')?.value||'personal';if(!value||value<1||!date||!concept){$('editNotice').textContent='Completa fecha, concepto y valor.';$('editNotice').style.display='block';return}if(scope==='family'&&!family.enabled){$('editNotice').textContent='Activa Familia antes de marcar un movimiento como familiar.';$('editNotice').style.display='block';return}x.type=$('editTipo').value;x.cat=$('editCategoria').value;x.date=date;x.value=value;x.concept=concept;x.budgetId=$('editBudget').value||null;x.scope=scope;x.memberId=scope==='family'?($('editMember').value||null):null;save();$('editModal').classList.add('hidden');await syncMovesIfPossible()}
 async function deleteMove(id){const x=state.moves.find(m=>m.id===id);if(!x||!confirm(`¿Eliminar “${x.concept}” por ${money(x.value)}?`))return;if(currentUser){const {error}=await supabaseClient.from('movimientos').delete().eq('id',id).eq('user_id',currentUser.id);if(error){alert('No se pudo eliminar de la nube. El movimiento se conserva.');return}}state.moves=state.moves.filter(m=>m.id!==id);save();setSyncStatus('ok','Movimiento eliminado y sincronizado')}
 window.deleteMove=deleteMove;
 function openPlan(id){editingPlanId=id||null;$('planModalTitle').textContent=id?'✏️ Editar proyección':'🔮 Nueva proyección';$('planNotice').style.display='none';const p=id?planned.find(x=>x.id===id):null;$('pTipo').value=p?.type||'gasto';$('pCategoria').value=p?.cat||'Vivienda';$('pFecha').value=p?.date||today;$('pValor').value=p?.value||'';$('pRec').value=p?.rec||'none';$('pEvery').value=p?.every||1;$('pEndType').value=p?.endType||'never';$('pEndValue').value=p?.endValue||'';$('pConcepto').value=p?.concept||'';refreshBudgetSelects();$('pBudget').value=p?.budgetId||'';updateEndInput();$('planModal').classList.remove('hidden')}
@@ -246,6 +249,91 @@ function deleteGoal(id){if(!confirm('¿Eliminar esta meta y sus aportes?'))retur
 window.deleteGoal=deleteGoal;function addContribution(id){contributionGoalId=id;const g=goals.find(x=>x.id===id);if(!g)return;$('contribTitle').textContent=`Meta: ${g.name} · falta ${money(Math.max(0,g.target-monthGoalContrib(g)))}`;$('contribValue').value='';$('contribDate').value=today;$('contribModal').classList.remove('hidden')}
 window.addContribution=addContribution;function saveContribution(){const v=Number($('contribValue').value),d=$('contribDate').value,g=goals.find(x=>x.id===contributionGoalId);if(!g||!v||v<1||!d){alert('Completa valor y fecha.');return}g.contributions=g.contributions||[];g.contributions.push({id:crypto.randomUUID(),value:v,date:d});saveGoals();$('contribModal').classList.add('hidden')}
 
+
+function updateMoveScopeUI(){
+  const scope=$('moveScope')?.value||'personal';
+  const show=scope==='family'&&family.enabled;
+  if($('moveMemberWrap'))$('moveMemberWrap').style.display=show?'block':'none';
+}
+function updateEditScopeUI(){
+  const scope=$('editScope')?.value||'personal';
+  const show=scope==='family'&&family.enabled;
+  if($('editMemberWrap'))$('editMemberWrap').style.display=show?'block':'none';
+  if(show)refreshEditMemberSelect();
+}
+function refreshEditMemberSelect(){
+  const s=$('editMember'); if(!s)return;
+  const old=s.value;
+  s.innerHTML='<option value="">Seleccionar integrante</option>'+((family.members||[]).map(m=>`<option value="${m.id}">${esc(m.name)}</option>`).join(''));
+  s.value=old;
+}
+
+
+async function loadCloudFamily(){
+  if(!currentUser) throw new Error('Debes iniciar sesión para conectar Familia.');
+  const {data: memberships,error}=await supabaseClient.from('familia_miembros').select('id,familia_id,nombre_visible,color,rol,activo,familias(id,nombre,creado_por)').eq('user_id',currentUser.id).eq('activo',true);
+  if(error) throw error;
+  if(!memberships?.length) return null;
+  const m=memberships[0], fam=m.familias;
+  family.cloudFamilyId=fam.id; family.cloudConnected=true; family.name=fam.nombre||family.name;
+  family.cloudRole=m.rol||'miembro'; family.cloudMemberId=m.id;
+  localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
+  return fam;
+}
+async function connectFamilyCloud(){
+  if(!currentUser){alert('Inicia sesión en SaveT antes de conectar Familia.');return}
+  try{
+    setSyncStatus('warn','Conectando Familia…');
+    const existing=await loadCloudFamily();
+    if(existing){renderFamily();refreshMemberSelect();setSyncStatus('ok',`Nube conectada · Familia: ${existing.nombre}`);return}
+    const defaultName=(family.members||[]).find(m=>m.isMe)?.name||'Andrés';
+    const visibleName=prompt('Nombre que verán los demás integrantes de la familia:',defaultName);
+    if(!visibleName?.trim()) return;
+    const {data:fam,error:fe}=await supabaseClient.from('familias').insert({nombre:family.name||'Mi familia',creado_por:currentUser.id}).select('id,nombre,creado_por').single();
+    if(fe) throw fe;
+    const {data:mem,error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:fam.id,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true}).select('id').single();
+    if(me) throw me;
+    family.cloudFamilyId=fam.id;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem.id;
+    family.ownerName=visibleName.trim();
+    localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
+    renderFamily();refreshMemberSelect();
+    setSyncStatus('ok','Familia conectada a la nube');
+  }catch(e){
+    console.error('SaveT family connect error',e);
+    alert('No se pudo conectar Familia a la nube. Revisa que tu sesión esté activa.');
+    setSyncStatus('err','Familia pendiente de conexión');
+  }
+}
+async function refreshCloudFamily(){
+  if(!family.cloudFamilyId||!currentUser)return;
+  try{
+    const {data:members,error}=await supabaseClient.from('familia_miembros').select('id,user_id,nombre_visible,color,rol,activo').eq('familia_id',family.cloudFamilyId).eq('activo',true).order('created_at',{ascending:true});
+    if(error) throw error;
+    family.cloudMembers=members||[];
+    // Only replace local members with members that have authenticated accounts.
+    // Keep local placeholders (e.g. Tomás/Nani/Nena) until their invitations are accepted.
+    const linked=(members||[]).map(m=>({id:m.user_id,name:m.nombre_visible,color:m.color||'blue',cloudId:m.id,cloud:true,rol:m.rol}));
+    const placeholders=(family.members||[]).filter(m=>!m.cloud && !linked.some(x=>x.name===m.name));
+    family.members=[...linked,...placeholders];
+    localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
+    renderFamily();refreshMemberSelect();
+  }catch(e){console.error('SaveT family refresh error',e)}
+}
+async function createFamilyInvitation(){
+  if(!family.cloudFamilyId||family.cloudRole!=='admin'){alert('Conecta Familia a la nube y usa una cuenta administradora para invitar.');return}
+  const email=prompt('Correo de la persona que quieres invitar:');
+  if(!email?.trim())return;
+  const name=prompt('Nombre que tendrá en Familia:',email.split('@')[0])||email.split('@')[0];
+  try{
+    const {data,error}=await supabaseClient.from('invitaciones_familia').insert({
+      familia_id:family.cloudFamilyId,email:email.trim().toLowerCase(),nombre_propuesto:name.trim(),
+      color:'blue',invitado_por:currentUser.id
+    }).select('token,expira_en').single();
+    if(error)throw error;
+    alert(`Invitación creada.\n\nCorreo: ${email.trim()}\nCódigo de invitación: ${data.token}\n\nPor ahora guardamos la invitación en Supabase. El envío automático de correo lo conectaremos en la siguiente etapa.`);
+  }catch(e){console.error(e);alert('No se pudo crear la invitación.')}
+}
+
 function saveFamily(){localStorage.setItem(FAMILY_KEY,JSON.stringify(family));renderFamily();refreshMemberSelect()}
 function renderFamily(){
   const panel=$('familyPanel'); if(!panel)return;
@@ -254,7 +342,7 @@ function renderFamily(){
     panel.innerHTML='<div class="notice">El modo familia está desactivado. Tus movimientos personales continúan funcionando normalmente.</div>';
     $('moveMemberWrap').style.display='none'; return;
   }
-  $('moveMemberWrap').style.display='block';
+  updateMoveScopeUI();
   const members=family.members||[];
   panel.innerHTML=`<div class="form">
     <div class="full"><label>Nombre del grupo familiar</label><input id="familyName" value="${esc(family.name||'Mi familia')}" maxlength="60"></div>
@@ -263,8 +351,9 @@ function renderFamily(){
     <button id="saveFamilyName" class="secondary">Guardar grupo</button>
     <button id="addFamilyMember">Agregar integrante</button>
   </div>
-  <div style="margin-top:12px">${members.length?members.map(m=>`<div class="family-member"><div class="family-member-main"><div class="pig" style="background:${({blue:'#dbeafe',green:'#dcfce7',orange:'#ffedd5',purple:'#ede9fe',pink:'#fce7f3'}[m.color]||'#e5e7eb')}">🐷</div><div><strong>${esc(m.name)}</strong><div class="small">Integrante del grupo</div></div></div><button class="delete-small" onclick="removeFamilyMember('${m.id}')">Eliminar</button></div>`).join(''):'<div class="empty">Agrega los integrantes que compartirán la información familiar.</div>'}</div>
-  <div class="notice">ℹ️ Esta primera versión guarda el grupo familiar y los préstamos en este dispositivo. La sincronización familiar entre varios dispositivos requiere tablas adicionales en Supabase.</div>
+  <div style="margin-top:12px">${members.length?members.map(m=>`<div class="family-member"><div class="family-member-main"><div class="pig" style="background:${({blue:'#dbeafe',green:'#dcfce7',orange:'#ffedd5',purple:'#ede9fe',pink:'#fce7f3'}[m.color]||'#e5e7eb')}">🐷</div><div><strong>${esc(m.name)}</strong><div class="small">${m.cloud?'☁️ Cuenta vinculada':'📱 Pendiente de vincular'}</div></div></div>${m.cloud?'':'<button class="delete-small" onclick="removeFamilyMember(\''+m.id+'\')">Eliminar</button>'}</div>`).join(''):'<div class="empty">Agrega los integrantes que compartirán la información familiar.</div>'}</div>
+  <div class="notice">${family.cloudConnected?`☁️ Familia conectada a Supabase. Los integrantes vinculados a cuentas podrán compartir información entre dispositivos.`:`ℹ️ Familia local. Puedes conectarla a la nube para compartirla entre dispositivos.`}</div>
+  <div class="actions" style="margin-top:10px">${family.cloudConnected?`<button id="refreshFamilyCloud" class="secondary">🔄 Actualizar familia</button><button id="inviteFamilyMember">✉️ Invitar integrante</button>`:`<button id="connectFamilyCloud">☁️ Conectar Familia a la nube</button>`}</div>
   <div style="margin-top:14px">
     <div class="row"><div><h3 style="margin:0;font-size:16px">🤝 Préstamos</h3><div class="small">Controla préstamos entre integrantes o con personas externas sin convertirlos automáticamente en ingresos o gastos.</div></div><button id="newLoan" class="secondary">Nuevo préstamo</button></div>
     <div class="loan-summary">
@@ -274,6 +363,9 @@ function renderFamily(){
     <div id="loansList"></div>
   </div>`;
   $('saveFamilyName').onclick=()=>{family.name=$('familyName').value.trim()||'Mi familia';saveFamily()};
+  if($('connectFamilyCloud'))$('connectFamilyCloud').onclick=connectFamilyCloud;
+  if($('refreshFamilyCloud'))$('refreshFamilyCloud').onclick=refreshCloudFamily;
+  if($('inviteFamilyMember'))$('inviteFamilyMember').onclick=createFamilyInvitation;
   $('newLoan').onclick=openLoanModal;
   renderLoans();
   $('addFamilyMember').onclick=()=>{const name=$('familyMemberName').value.trim();if(!name){alert('Escribe el nombre del integrante.');return}family.members.push({id:crypto.randomUUID(),name,color:$('familyMemberColor').value});saveFamily()};
@@ -376,18 +468,20 @@ async function syncNow(){
     $('syncNotice').textContent='No se pudo sincronizar. Tus datos locales se conservaron.';
   }
 }
-async function handleSession(session){currentUser=session?.user||null;if(currentUser){$('userLine').textContent=currentUser.email||'Cuenta conectada';$('loginBtn').style.display='none';$('syncBtn').style.display='inline-block';$('logoutBtn').style.display='inline-block';setSyncStatus('warn','Conectando…');try{await syncNow()}catch(e){setSyncStatus('err','No se pudo conectar')}}else{$('userLine').textContent='Solo en este dispositivo';$('loginBtn').style.display='inline-block';$('syncBtn').style.display='none';$('logoutBtn').style.display='none';setSyncStatus('','Sin iniciar sesión')}}
+async function handleSession(session){currentUser=session?.user||null;if(currentUser){$('userLine').textContent=currentUser.email||'Cuenta conectada';$('loginBtn').style.display='none';$('syncBtn').style.display='inline-block';$('logoutBtn').style.display='inline-block';setSyncStatus('warn','Conectando…');try{await syncNow();if(family.cloudConnected||family.enabled){await refreshCloudFamily()}}catch(e){setSyncStatus('err','No se pudo conectar')}}else{$('userLine').textContent='Solo en este dispositivo';$('loginBtn').style.display='inline-block';$('syncBtn').style.display='none';$('logoutBtn').style.display='none';setSyncStatus('','Sin iniciar sesión')}}
 async function analyzeReceipt(file){$('photoModal').classList.remove('hidden');$('photoPreview').src=URL.createObjectURL(file);$('ocrStatus').textContent='Preparando lectura de la factura…';$('ocrText').style.display='none';try{if(!window.Tesseract){const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';document.head.appendChild(s);await new Promise((res,rej)=>{s.onload=res;s.onerror=rej})}$('ocrStatus').textContent='Leyendo factura… puede tardar unos segundos.';const result=await Tesseract.recognize(file,'spa',{logger:m=>{if(m.status==='recognizing text'&&m.progress) $('ocrStatus').textContent=`Leyendo factura… ${Math.round(m.progress*100)}%`}});const text=result.data.text||'';$('ocrText').textContent=text||'No se pudo leer texto.';$('ocrText').style.display='block';const total=findReceiptTotal(text);const date=findReceiptDate(text);const merchant=findMerchant(text);if(total){$('valor').value=total;$('ocrStatus').textContent=`✅ Total detectado: ${money(total)}. Revisa y confirma.`}else{$('ocrStatus').textContent='No encontré un total con suficiente confianza. Puedes escribirlo manualmente.'}if(date)$('fecha').value=date;if(merchant&&!$('concepto').value.trim())$('concepto').value=merchant.slice(0,100)}catch(e){console.error(e);$('ocrStatus').textContent='No fue posible leer la factura. Puedes cerrar y registrar el gasto manualmente.'}}
 function findReceiptTotal(text){const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);const candidates=[];for(const line of lines){if(/\b(total|total a pagar|importe|pagar|neto)\b/i.test(line)){const nums=line.match(/(?:\$\s*)?\d[\d.\s,]{1,}/g)||[];for(const n of nums){const v=parseMoneyCandidate(n);if(v>0)candidates.push(v)}}}if(candidates.length)return Math.max(...candidates);const all=text.match(/(?:\$\s*)?\d[\d.\s,]{2,}/g)||[];const vals=all.map(parseMoneyCandidate).filter(v=>v>0&&v<100000000);return vals.length?Math.max(...vals):0}
 function parseMoneyCandidate(s){let x=String(s).replace(/[^0-9,.-]/g,'').replace(/\s/g,'');if(!x)return 0;if(x.includes('.')&&x.includes(',')){if(x.lastIndexOf(',')>x.lastIndexOf('.'))x=x.replace(/\./g,'').replace(',','.');else x=x.replace(/,/g,'')}else if((x.match(/\./g)||[]).length>1)x=x.replace(/\./g,'');else if((x.match(/,/g)||[]).length>1)x=x.replace(/,/g,'');else if(x.includes(',')){const p=x.split(',');x=p.length===2&&p[1].length<=2?p.join('.') : p.join('')}else if(x.includes('.')){const p=x.split('.');x=p.length===2&&p[1].length<=2?p.join('.') : p.join('')}const v=Number(x);return Number.isFinite(v)?Math.round(v):0}
 function findReceiptDate(text){const m=text.match(/\b(\d{1,2})[\/-](\d{1,2})[\/-](\d{2,4})\b/);if(!m)return '';let y=m[3];if(y.length===2)y='20'+y;return `${y}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`}
 function findMerchant(text){const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);return lines.find(l=>/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]{3,}/.test(l)&&!/^\d/.test(l)&&l.length<70)||''}
 $('photoBtn').onclick=()=>$('receiptInput').click();$('receiptInput').onchange=e=>{const f=e.target.files?.[0];if(f)analyzeReceipt(f)};$('closePhoto').onclick=()=>$('photoModal').classList.add('hidden');
-$('add').onclick=async()=>{const v=Number($('valor').value),c=$('concepto').value.trim(),date=$('fecha').value;if(!v||v<1||!c||!date){alert('Completa fecha, concepto y valor.');return}state.moves.push({id:crypto.randomUUID(),type:$('tipo').value,cat:$('categoria').value,date,value:v,concept:c,budgetId:$('movBudget').value||null,memberId:family.enabled?($('moveMember').value||null):null});save();refreshBudgetSelects();$('movBudget').value='';$('valor').value='';$('concepto').value='';await syncMovesIfPossible()};
-$('familyToggle').onclick=()=>{family.enabled=!family.enabled;saveFamily()};
+$('add').onclick=async()=>{const v=Number($('valor').value),c=$('concepto').value.trim(),date=$('fecha').value,scope=$('moveScope')?.value||'personal';if(!v||v<1||!c||!date){alert('Completa fecha, concepto y valor.');return}if(scope==='family'&&!family.enabled){alert('Activa Familia antes de registrar un movimiento familiar.');return}state.moves.push({id:crypto.randomUUID(),type:$('tipo').value,cat:$('categoria').value,date,value:v,concept:c,budgetId:$('movBudget').value||null,scope,memberId:scope==='family'?($('moveMember').value||null):null});save();refreshBudgetSelects();$('movBudget').value='';$('valor').value='';$('concepto').value='';$('moveScope').value='personal';updateMoveScopeUI();await syncMovesIfPossible()};
+$('familyToggle').onclick=()=>{family.enabled=!family.enabled;saveFamily();updateMoveScopeUI();updateEditScopeUI()};
 $('closeLoan').onclick=()=>$('loanModal').classList.add('hidden');
 $('closeLoanPayment').onclick=()=>$('loanPaymentModal').classList.add('hidden');
 $('loanPerson').onchange=updateLoanPerson;
+$('moveScope').onchange=updateMoveScopeUI;
+$('editScope').onchange=updateEditScopeUI;
 $('saveLoan').onclick=saveLoan;
 $('saveLoanPayment').onclick=saveLoanPayment;
 
