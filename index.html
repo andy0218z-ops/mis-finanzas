@@ -289,11 +289,14 @@ async function connectFamilyCloud(){
     const defaultName=(family.members||[]).find(m=>m.isMe)?.name||'Andrés';
     const visibleName=prompt('Nombre que verán los demás integrantes de la familia:',defaultName);
     if(!visibleName?.trim()) return;
-    const {data:fam,error:fe}=await supabaseClient.from('familias').insert({nombre:family.name||'Mi familia',creado_por:currentUser.id}).select('id,nombre,creado_por').single();
+    // Create the family with a client-generated UUID. This avoids a SELECT-after-INSERT
+    // being blocked by the RLS membership policy before the first member exists.
+    const familyId=crypto.randomUUID();
+    const {error:fe}=await supabaseClient.from('familias').insert({id:familyId,nombre:family.name||'Mi familia',creado_por:currentUser.id});
     if(fe) throw fe;
-    const {data:mem,error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:fam.id,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true}).select('id').single();
+    const {data:mem,error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:familyId,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true}).select('id').single();
     if(me) throw me;
-    family.cloudFamilyId=fam.id;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem.id;
+    family.cloudFamilyId=familyId;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem.id;
     family.ownerName=visibleName.trim();
     localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
     renderFamily();refreshMemberSelect();
