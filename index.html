@@ -289,23 +289,31 @@ async function connectFamilyCloud(){
     const defaultName=(family.members||[]).find(m=>m.isMe)?.name||'Andrés';
     const visibleName=prompt('Nombre que verán los demás integrantes de la familia:',defaultName);
     if(!visibleName?.trim()) return;
-    // Create the family with a client-generated UUID. This avoids a SELECT-after-INSERT
-    // being blocked by the RLS membership policy before the first member exists.
-    const familyId=crypto.randomUUID();
-    const {error:fe}=await supabaseClient.from('familias').insert({id:familyId,nombre:family.name||'Mi familia',creado_por:currentUser.id});
-    if(fe) throw fe;
-    const {error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:familyId,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true});
-    if(me) throw me;
-    const {data:mem,error:mr}=await supabaseClient.from('familia_miembros').select('id').eq('familia_id',familyId).eq('user_id',currentUser.id).eq('activo',true).maybeSingle();
-    if(mr) throw mr;
-    family.cloudFamilyId=familyId;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem?.id||null;
+
+    // Use a SECURITY DEFINER RPC so the first family member can be created atomically
+    // without depending on the RLS ordering between familias and familia_miembros.
+    const {data,error}=await supabaseClient.rpc('crear_familia_savet',{
+      p_nombre: family.name||'Mi familia',
+      p_nombre_visible: visibleName.trim(),
+      p_color: 'blue'
+    });
+    if(error) throw error;
+    if(!data?.familia_id) throw new Error('Supabase no devolvió el identificador de la familia.');
+    family.cloudFamilyId=data.familia_id;
+    family.cloudConnected=true;
+    family.cloudRole='admin';
+    family.cloudMemberId=data.miembro_id||null;
     family.ownerName=visibleName.trim();
     localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
+    await refreshCloudFamily();
     renderFamily();refreshMemberSelect();
     setSyncStatus('ok','Familia conectada a la nube');
   }catch(e){
     console.error('SaveT family connect error',e);
-    alert('No se pudo conectar Familia a la nube. Revisa que tu sesión esté activa.');
+    const msg=e?.message||e?.details||e?.hint||'Error desconocido';
+    alert('No se pudo conectar Familia a la nube.
+
+Detalle: '+msg);
     setSyncStatus('ok','Nube de movimientos conectada · Familia pendiente de conexión');
   }
 }
