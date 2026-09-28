@@ -294,9 +294,11 @@ async function connectFamilyCloud(){
     const familyId=crypto.randomUUID();
     const {error:fe}=await supabaseClient.from('familias').insert({id:familyId,nombre:family.name||'Mi familia',creado_por:currentUser.id});
     if(fe) throw fe;
-    const {data:mem,error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:familyId,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true}).select('id').single();
+    const {error:me}=await supabaseClient.from('familia_miembros').insert({familia_id:familyId,user_id:currentUser.id,nombre_visible:visibleName.trim(),color:'blue',rol:'admin',activo:true});
     if(me) throw me;
-    family.cloudFamilyId=familyId;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem.id;
+    const {data:mem,error:mr}=await supabaseClient.from('familia_miembros').select('id').eq('familia_id',familyId).eq('user_id',currentUser.id).eq('activo',true).maybeSingle();
+    if(mr) throw mr;
+    family.cloudFamilyId=familyId;family.cloudConnected=true;family.cloudRole='admin';family.cloudMemberId=mem?.id||null;
     family.ownerName=visibleName.trim();
     localStorage.setItem(FAMILY_KEY,JSON.stringify(family));
     renderFamily();refreshMemberSelect();
@@ -304,7 +306,7 @@ async function connectFamilyCloud(){
   }catch(e){
     console.error('SaveT family connect error',e);
     alert('No se pudo conectar Familia a la nube. Revisa que tu sesión esté activa.');
-    setSyncStatus('err','Familia pendiente de conexión');
+    setSyncStatus('ok','Nube de movimientos conectada · Familia pendiente de conexión');
   }
 }
 async function refreshCloudFamily(){
