@@ -1,0 +1,9 @@
+SaveT v10.4.4 — conexión de Familia corregida
+
+1. Publica todos los archivos del ZIP en GitHub Pages reemplazando la versión anterior.
+2. En Supabase abre SQL Editor.
+3. Ejecuta UNA SOLA VEZ: SaveT-familia-permisos.sql
+4. Vuelve a SaveT, inicia sesión y pulsa «Conectar Familia».
+
+El cambio de código no elimina login ni sincronización de movimientos personales.
+La corrección principal es que SaveT ya no trata un error de lectura de familia_miembros como una desconexión definitiva y muestra el paso exacto si faltan permisos.
